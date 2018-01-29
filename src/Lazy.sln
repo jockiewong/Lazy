@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{57759470-4A50-4A4F-B4E5-19FCD48013B7}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.Utilities", "Lazy.Utilities\Lazy.Utilities.csproj", "{73E186F6-3B29-4AB7-B4E1-AC23A89FD85D}"
 EndProject
@@ -23,11 +26,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.EFCore.Tests", "Lazy.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.Kernel.Tests", "Lazy.Kernel.Tests\Lazy.Kernel.Tests.csproj", "{A497B6ED-A64D-4438-A23B-E7AF57BB00F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lazy.EFCore", "Lazy.EFCore\Lazy.EFCore.csproj", "{01F8B2D1-43ED-4E79-B25D-10E93857CF89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.EFCore", "Lazy.EFCore\Lazy.EFCore.csproj", "{01F8B2D1-43ED-4E79-B25D-10E93857CF89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lazy.EFBase", "Lazy.EFBase\Lazy.EFBase.csproj", "{BBF62516-1154-43ED-A3DD-77E0D199BC9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.EFBase", "Lazy.EFBase\Lazy.EFBase.csproj", "{BBF62516-1154-43ED-A3DD-77E0D199BC9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lazy.EF6", "Lazy.EF6\Lazy.EF6.csproj", "{7F94545B-5F15-426C-A317-9BF4122E17C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazy.EF6", "Lazy.EF6\Lazy.EF6.csproj", "{7F94545B-5F15-426C-A317-9BF4122E17C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
