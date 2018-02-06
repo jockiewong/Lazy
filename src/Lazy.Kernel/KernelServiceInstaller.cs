@@ -15,9 +15,11 @@ namespace Lazy.Kernel
     {
         public static void Installer(IServiceCollection services)
         {
+            services.AddSingleton<IServiceDescriptorFinder, ConventionServiceDescriptorFinder>();
             services.TryAddSingleton<IIocManager>(r => new IocManager(services));
-            services.TryAddTransient<IModuleDependencyResolver, ModuleDependencyResolver>();
-            services.TryAddTransient<IModuleManagaer>(r => new ModuleManagaer(services));
+            services.TryAddSingleton<IModuleDependencyResolver, ModuleDependencyResolver>();
+            services.AddSingleton<ILazyBuilder>(r => new LazyBuilder(services));
+            services.TryAddSingleton<IModuleManager, ModuleManagaer>();
         }
     }
 }

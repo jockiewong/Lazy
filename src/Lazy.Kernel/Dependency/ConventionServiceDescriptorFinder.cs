@@ -8,6 +8,9 @@ using System.Text;
 
 namespace Lazy.Kernel.Dependency
 {
+    /// <summary>
+    /// 默认使用的约定服务查找器,只会注册接口以及自身为服务
+    /// </summary>
     public class ConventionServiceDescriptorFinder : IServiceDescriptorFinder
     {
         public IEnumerable<ServiceDescriptor> FindFromAssembly(Assembly assembly)

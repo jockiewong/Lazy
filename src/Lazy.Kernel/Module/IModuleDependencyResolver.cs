@@ -6,15 +6,15 @@ using System.Text;
 namespace Lazy.Kernel.Module
 {
     /// <summary>
-    /// 模块依赖解析器
+    /// 模块依赖关系解析器
     /// </summary>
     public interface IModuleDependencyResolver
     {
         /// <summary>
-        /// 从入口程序集解析模块依赖关系
+        /// 从入口程序集解析出所有的依赖信息
         /// </summary>
-        /// <param name="entryAssembly"></param>
+        /// <param name="entryAssemblies"></param>
         /// <returns></returns>
-        ModuleDescriptor DependencyResolve(Assembly entryAssembly);
+        ModuleDependencyResolvedWrapper DependencyResolve(IEnumerable<Assembly> entryAssemblies);
     }
 }

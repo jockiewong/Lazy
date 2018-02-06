@@ -11,10 +11,16 @@ namespace Lazy.Kernel.Module
     /// </summary>
     public abstract class LazyModule
     {
-        protected IServiceProvider Services { get; }
+        //public virtual void ConfigureService(IServiceCollection serviceCollection, ILazyBuilder lazyBuilder) { }
 
-        public void Init() { }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public virtual void OnInit() { }
 
-        public void Inited() { }
+        /// <summary>
+        /// 初始化后
+        /// </summary>
+        public virtual void OnInited() { }
     }
 }

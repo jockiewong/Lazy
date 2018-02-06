@@ -11,43 +11,149 @@ namespace Lazy.Utilities.Extensions
 {
     public static class IEnumerableExtensions
     {
+        /// <summary>
+        /// 转换为HashSet集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
         {
-            HashSet<T> hs = new HashSet<T>();
-            source.ForEach_(r => hs.Add(r));
-            return hs;
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return new HashSet<T>(source);
         }
+
+        /// <summary>
+        /// 转换为HashSet集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            return new HashSet<T>(source, comparer);
+        }
+
+        /// <summary>
+        /// 集合拼接为字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
         public static string Join<T>(this IEnumerable<T> source, string separator)
         {
+            if (separator == null)
+            {
+                throw new ArgumentNullException(nameof(separator));
+            }
+
             return string.Join<T>(separator, source);
         }
 
+        /// <summary>
+        /// 循环集合元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="action"></param>
         public static void ForEach_<T>(this IEnumerable<T> list, Action<T> action)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
             foreach (var item in list)
             {
                 action(item);
             }
         }
 
+        /// <summary>
+        /// 转换只读集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public static IReadOnlyList<T> AsReadOnly<T>(this IEnumerable<T> list)
         {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
             return list.ToImmutableList();
         }
 
+        /// <summary>
+        /// 判断集合是否为null或者空
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> list)
         {
             return list == null || !list.Any();
         }
 
-        public static bool HasRepeat<T>(this IEnumerable<T> list)
+        /// <summary>
+        /// 判断集合是否存在重复元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="keyComparer"></param>
+        /// <returns></returns>
+        public static bool HasRepeat<T>(this IEnumerable<T> list, IEqualityComparer<T> keyComparer = null)
         {
-            return list.GroupBy(r => r).Any(g => g.Count() > 1);
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+            if (keyComparer == null)
+                return list.GroupBy(r => r).Any(g => g.Count() > 1);
+            else
+                return list.GroupBy(r => r, keyComparer).Any(g => g.Count() > 1);
         }
 
-        public static bool HasRepeat<T>(this IEnumerable<T> list, Func<T, object> selectProperty)
+        /// <summary>
+        /// 判断集合中是否存在属性相等的元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="selectProperty"></param>
+        /// <param name="keyComparer"></param>
+        /// <returns></returns>
+        public static bool HasRepeat<T>(this IEnumerable<T> list, Func<T, object> selectProperty, IEqualityComparer<object> keyComparer = null)
         {
-            return list.GroupBy(selectProperty).Any(g => g.Count() > 1);
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (selectProperty == null)
+            {
+                throw new ArgumentNullException(nameof(selectProperty));
+            }
+
+            if (keyComparer == null)
+                return list.GroupBy(selectProperty).Any(g => g.Count() > 1);
+            else
+                return list.GroupBy(selectProperty, keyComparer).Any(g => g.Count() > 1);
         }
 
 
@@ -94,6 +200,11 @@ namespace Lazy.Utilities.Extensions
         /// <returns></returns>
         public static IQueryable Paging(this IQueryable query, int pageIndex, int pageSize)
         {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             return
                 query
                     .Skip((pageIndex - 1) * pageSize)
@@ -102,7 +213,11 @@ namespace Lazy.Utilities.Extensions
 
         public static object First_(this IQueryable source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "First",
@@ -112,7 +227,11 @@ namespace Lazy.Utilities.Extensions
 
         public static object FirstOrDefault_(this IQueryable source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "FirstOrDefault",
@@ -122,12 +241,21 @@ namespace Lazy.Utilities.Extensions
 
         public static List<object> ToList_(this IQueryable source)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.ToDynamicList();
         }
 
         public static object Single_(this IQueryable source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "Single",
@@ -137,7 +265,11 @@ namespace Lazy.Utilities.Extensions
 
         public static object SingleOrDefault_(this IQueryable source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.Provider.Execute(
                 Expression.Call(
                     typeof(Queryable), "SingleOrDefault",

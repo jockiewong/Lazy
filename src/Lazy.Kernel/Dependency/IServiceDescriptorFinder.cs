@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Lazy.Kernel.Dependency
 {
+    /// <summary>
+    /// 服务查找器
+    /// </summary>
     public interface IServiceDescriptorFinder
     {
 

@@ -8,8 +8,8 @@ namespace Lazy.Kernel.Module
     /// <summary>
     /// 模块配置接口
     /// </summary>
-    public interface IModuleConfig
+    public interface IModuleConfigure
     {
-        void Configure(ILazyBuilder lazyBuilder, IServiceCollection serviceCollection);
+        void Configure(ILazyBuilder lazyBuilder);
     }
 }

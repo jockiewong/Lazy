@@ -9,12 +9,12 @@ namespace Lazy.Kernel.Module
     /// <summary>
     /// 模块管理器
     /// </summary>
-    public interface IModuleManagaer
+    public interface IModuleManager
     {
         /// <summary>
-        /// 服务集合
+        /// 所有的模块,平行结构
         /// </summary>
-        IServiceCollection Services { get; }
+        ICollection<ModuleDescriptor> AllModule { get; }
 
         /// <summary>
         /// 从入口程序集与启动参数初始化模块
