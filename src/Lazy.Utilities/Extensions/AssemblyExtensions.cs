@@ -15,14 +15,17 @@ namespace Lazy.Utilities.Extensions
         /// <returns></returns>
         public static IEnumerable<Type> GetTypesSafely(this Assembly assembly)
         {
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                return ex.Types.Where(x => x != null);
-            }
+            // .net framework 才需要这样写, .net standard已经有DefinedTypes属性实现
+            //try
+            //{
+            //    return assembly.GetTypes();
+            //}
+            //catch (ReflectionTypeLoadException ex)
+            //{
+            //    return ex.Types.Where(x => x != null);
+            //}
+
+            return assembly.DefinedTypes;
         }
 
     }

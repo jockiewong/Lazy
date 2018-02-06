@@ -105,7 +105,7 @@ namespace Lazy.EFCore
 
             //所有fluent api配置类
             var configTypes = assembly
-                               .GetTypesSafely()
+                               .DefinedTypes
                                .Where(t =>
                                  !t.IsAbstract && t.BaseType != null && t.IsClass
                                  && t.IsChildTypeOfGenericType(typeof(IEntityTypeConfiguration<>))).ToList();
@@ -128,7 +128,7 @@ namespace Lazy.EFCore
             });
 
             assembly
-                .GetTypesSafely()
+                .DefinedTypes
                 .Where(r => !registedTypes.Contains(r))
                 .Where(entityTypePredicate)
                 .ForEach_(r =>

@@ -149,7 +149,7 @@ namespace Lazy.EF6
                      && m.GetGenericArguments().Any(a => a.Name == "TEntityType"));
             //扫描所有fluent api配置类,要求父类型必须是EntityTypeConfiguration<TEntityType>
             var configTypes = assembly
-                               .GetTypesSafely()
+                               .DefinedTypes
                                .Where(t =>
                                      !t.IsAbstract && t.BaseType != null && t.IsClass
                                      && t.BaseType.IsGenericType
@@ -175,7 +175,7 @@ namespace Lazy.EF6
 
             //反射调用Entity方法 注册实体
             assembly
-                .GetTypesSafely()
+                .DefinedTypes
                 .Where(entityTypePredicate)
                 .ForEach_(r =>
                 {

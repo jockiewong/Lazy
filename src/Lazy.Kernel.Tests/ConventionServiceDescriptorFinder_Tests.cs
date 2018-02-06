@@ -4,8 +4,9 @@ using System.Text;
 using Xunit;
 using Shouldly;
 using Lazy.Utilities.Extensions;
-using Lazy.Kernel.Dependcy;
+using Lazy.Kernel.Dependency;
 using System.Linq;
+using System.Reflection;
 
 namespace Lazy.Kernel.Tests
 {
@@ -17,7 +18,7 @@ namespace Lazy.Kernel.Tests
             ConventionServiceDescriptorFinder conventionServiceDescriptorFinder = new ConventionServiceDescriptorFinder();
 
 
-            var services = conventionServiceDescriptorFinder.AddByConvention(this.GetType().Assembly);
+            var services = conventionServiceDescriptorFinder.FindFromAssembly(this.GetType().Assembly);
 
 
             var ia = services.FirstOrDefault(r => r.ServiceType == typeof(IA));

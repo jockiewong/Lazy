@@ -50,6 +50,41 @@ namespace Lazy.Utilities.Extensions
             return list.GroupBy(selectProperty).Any(g => g.Count() > 1);
         }
 
+
+        public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> list, bool condition, Func<T, bool> where)
+        {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (where == null)
+            {
+                throw new ArgumentNullException(nameof(where));
+            }
+
+            if (condition)
+                return list.Where(where);
+            return list;
+        }
+
+        public static IQueryable<T> WhereIf<T>(this IQueryable<T> list, bool condition, Expression<Func<T, bool>> where)
+        {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            if (where == null)
+            {
+                throw new ArgumentNullException(nameof(where));
+            }
+
+            if (condition)
+                return list.Where(where);
+            return list;
+        }
+
         /// <summary>
         /// 分页查询
         /// </summary>

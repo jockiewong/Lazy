@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazy.Kernel.Dependcy
+namespace Lazy.Kernel
 {
-    public interface ITransient
+    class LazyBuilder : ILazyBuilder
     {
     }
 }
