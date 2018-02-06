@@ -11,9 +11,9 @@ namespace Lazy.Kernel.Dependency
     /// <summary>
     /// 默认使用的约定服务查找器,只会注册接口以及自身为服务
     /// </summary>
-    public class ConventionServiceDescriptorFinder : IServiceDescriptorFinder
+    public class ConventionServiceDescriptorProvider : IServiceDescriptorProvider
     {
-        public IEnumerable<ServiceDescriptor> FindFromAssembly(Assembly assembly)
+        public IEnumerable<ServiceDescriptor> FromAssembly(Assembly assembly, bool serviceContainSelf)
         {
             var types = assembly
                             .DefinedTypes
@@ -52,7 +52,8 @@ namespace Lazy.Kernel.Dependency
                     else
                         services.Add(interfaceType);
                 }
-                services.Add(type);
+                if (serviceContainSelf)
+                    services.Add(type);
 
                 services.ForEach(service =>
                 {

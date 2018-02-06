@@ -41,14 +41,12 @@ namespace Lazy.Kernel
                 var moduleManager = scope.ServiceProvider.GetRequiredService<IModuleManager>();
                 moduleManager.Init(typeof(TStartupModuleType).Assembly, options);
 
-                var finders = scope.ServiceProvider.GetServices<IServiceDescriptorFinder>();
-
                 moduleManager.AllModule.ForEach_(r =>
                 {
                     services.TryAddSingleton(r.ModuleType);
-                    finders.ForEach_(a =>
+                    options.ServiceFinder.ForEach_(a =>
                     {
-                        var serviceDescriptors = a.FindFromAssembly(r.Assembly);
+                        var serviceDescriptors = a.FromAssembly(r.Assembly, options.ServiceContainSelf);
                         services.Add(serviceDescriptors);
                     });
                 });

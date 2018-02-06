@@ -15,10 +15,10 @@ namespace Lazy.Kernel.Tests
         [Fact]
         public void Tests()
         {
-            ConventionServiceDescriptorFinder conventionServiceDescriptorFinder = new ConventionServiceDescriptorFinder();
+            ConventionServiceDescriptorProvider conventionServiceDescriptorFinder = new ConventionServiceDescriptorProvider();
 
 
-            var services = conventionServiceDescriptorFinder.FindFromAssembly(this.GetType().Assembly);
+            var services = conventionServiceDescriptorFinder.FromAssembly(this.GetType().Assembly);
 
 
             var ia = services.FirstOrDefault(r => r.ServiceType == typeof(IA));

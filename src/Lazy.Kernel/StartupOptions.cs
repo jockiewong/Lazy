@@ -13,10 +13,10 @@ namespace Lazy.Kernel
     {
 
         /// <summary>
-        /// 服务查找器清单,默认为ConventionServiceDescriptorFinder
+        /// 服务提供器集合,默认为ConventionServiceDescriptorFinder
         /// </summary>
-        public ICollection<IServiceDescriptorFinder> ServiceFinder { get; } = new List<IServiceDescriptorFinder>() {
-            new ConventionServiceDescriptorFinder()
+        public ICollection<IServiceDescriptorProvider> ServiceFinder { get; } = new List<IServiceDescriptorProvider>() {
+            new ConventionServiceDescriptorProvider()
         };
 
 
@@ -24,5 +24,11 @@ namespace Lazy.Kernel
         /// 插件程序集清单
         /// </summary>
         public ICollection<Assembly> PluginAssemblies { get; } = new List<Assembly>();
+
+        /// <summary>
+        /// 服务注册时是否包含实现类本身,默认为false
+        /// <para>如:IUser的实现类User,是否注册User类为服务,默认不注册</para>
+        /// </summary>
+        public bool ServiceContainSelf { get; } = false;
     }
 }
