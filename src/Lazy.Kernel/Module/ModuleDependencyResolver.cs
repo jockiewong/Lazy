@@ -127,6 +127,9 @@ namespace Lazy.Kernel.Module
 
                 foreach (var item in info.Library.Dependencies)
                 {
+                    if (!moduleDependencyInfo.ContainsKey(item.Name))
+                        continue;
+
                     var dependency = moduleDependencyInfo[item.Name];
                     ModuleDescriptor descriptor = new ModuleDescriptor
                     {
@@ -136,9 +139,9 @@ namespace Lazy.Kernel.Module
                         ModuleConfigureInstance = dependency.ConfigureType == null ? null : (IModuleConfigure)Activator.CreateInstance(dependency.ConfigureType)
                     };
                     FillDependencies(descriptor);
-                    _allModuleDesciptors.Add(dependency.ModuleType, descriptor);
                     moduleDescriptor.Dependencies.Add(descriptor);
                 }
+                _allModuleDesciptors.Add(moduleDescriptor.ModuleType, moduleDescriptor);
             }
         }
 

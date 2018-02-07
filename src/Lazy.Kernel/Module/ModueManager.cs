@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -42,14 +43,25 @@ namespace Lazy.Kernel.Module
         {
             var assemblies = new HashSet<Assembly>();
             assemblies.Add(entryAssembly);
-            options.PluginAssemblies.ForEach_(r => assemblies.Add(r));
+            options.Plugins.ForEach_(r =>
+            {
+                assemblies.Add(r.PluginAssembly);
+                if (r.DependAssemblyResolver != null)
+                {
+                    AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
+                    {
+                        return r.DependAssemblyResolver.AssemblyResolve(r.PluginAssembly, sender, e);
+                    };
+                }
+            });
+
             HashSet<ModuleDescriptor> allModule = new HashSet<ModuleDescriptor>();
 
             var resolvedResult = ModuleDependencyResolver.DependencyResolve(assemblies);
 
             _allModule = resolvedResult.ParallelResult.Values;
 
-            AllModule.ForEach_(r =>
+            _allModule.ForEach_(r =>
             {
                 if (r.ModuleConfigureInstance != null)
                     r.ModuleConfigureInstance.Configure(lazyBuilder);

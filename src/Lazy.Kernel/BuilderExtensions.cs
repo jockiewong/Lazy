@@ -43,14 +43,17 @@ namespace Lazy.Kernel
 
                 moduleManager.AllModule.ForEach_(r =>
                 {
-                    services.TryAddSingleton(r.ModuleType);
-                    options.ServiceFinder.ForEach_(a =>
+                    services.TryAddSingleton(r.ModuleType, r.ModuleType);
+                    options.ServiceProvider.ForEach_(a =>
                     {
                         var serviceDescriptors = a.FromAssembly(r.Assembly, options.ServiceContainSelf);
                         services.Add(serviceDescriptors);
                     });
                 });
 
+                //不同的provider,单例也不是单例,所以replace
+                services.Replace(ServiceDescriptor.Singleton(moduleManager));
+                //不同的provider,因为LazyBuilder的注册使用的new一个实例,所以单例还是单例
                 return scope.ServiceProvider.GetService<ILazyBuilder>();
             }
         }

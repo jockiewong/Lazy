@@ -19,6 +19,7 @@ namespace Lazy.Kernel
             services.TryAddSingleton<IModuleDependencyResolver, ModuleDependencyResolver>();
             services.AddSingleton<ILazyBuilder>(r => new LazyBuilder(services));
             services.TryAddSingleton<IModuleManager, ModuleManagaer>();
+            services.TryAddTransient(typeof(IModuleOptionProvider<>), typeof(DefaultModuleOptionProvider<>));
         }
     }
 }
