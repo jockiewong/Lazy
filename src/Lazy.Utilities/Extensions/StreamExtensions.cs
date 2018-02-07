@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LazyWorks.Utilities.Extensions
+namespace Lazy.Utilities.Extensions
 {
     public static class StreamExtensions
     {

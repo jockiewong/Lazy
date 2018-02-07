@@ -10,16 +10,14 @@ using System.Reflection;
 
 namespace Lazy.Kernel.Tests
 {
-    public class ConventionServiceDescriptorFinder_Tests
+    public class ConventionServiceDescriptorProvider_Tests
     {
         [Fact]
         public void Tests()
         {
-            ConventionServiceDescriptorProvider conventionServiceDescriptorFinder = new ConventionServiceDescriptorProvider();
+            ConventionServiceDescriptorProvider provider = new ConventionServiceDescriptorProvider();
 
-
-            var services = conventionServiceDescriptorFinder.FromAssembly(this.GetType().Assembly);
-
+            var services = provider.FromAssembly(this.GetType().Assembly, true);
 
             var ia = services.FirstOrDefault(r => r.ServiceType == typeof(IA));
             ia.ShouldNotBeNull();
@@ -67,44 +65,13 @@ namespace Lazy.Kernel.Tests
             var ie = services.FirstOrDefault(r => r.ServiceType == typeof(IE<,>));
             ie.ShouldNotBeNull();
             ie.ImplementationType.ShouldBe(typeof(E<,>));
+
+
+            ConventionServiceDescriptorProvider provider1 = new ConventionServiceDescriptorProvider();
+            var services1 = provider.FromAssembly(this.GetType().Assembly, false);
+
+            var a1 = services1.FirstOrDefault(r => r.ServiceType == typeof(A));
+            a1.ShouldBeNull();
         }
     }
-
-    public interface IA : ITransient
-    {
-
-    }
-
-    public class A : IA
-    {
-
-    }
-
-    public interface IB : ISingleton
-    {
-
-    }
-
-    public class B : IB
-    {
-
-    }
-
-    public interface IC
-    {
-
-    }
-
-    public class C : IScoped, IC
-    {
-
-    }
-
-    public interface ID<t1, t2> { }
-
-    public class D : ID<string, int>, ITransient { }
-
-    public interface IE<t1, t2> { }
-
-    public class E<t1, t2> : IE<t1, t2>, ITransient { }
 }

@@ -36,11 +36,10 @@ namespace Lazy.Kernel.Dependency
             types.ForEach_(type =>
             {
                 List<Type> services = new List<Type>();
-                services.Add(type);
 
                 if (!_baseType.IsGenericTypeDefinition && type.IsChildTypeOf(_baseType))
                 {
-                    _baseType.ImplementedInterfaces.ForEach_(interfaceType =>
+                    type.ImplementedInterfaces.ForEach_(interfaceType =>
                     {
                         if (Utils.IsConvetionInterfaceType(interfaceType) || interfaceType == _baseType)
                             return;
@@ -48,7 +47,7 @@ namespace Lazy.Kernel.Dependency
                         services.Add(interfaceType);
                     });
                 }
-                else if (_baseType.IsGenericTypeDefinition && type.IsChildTypeOfGenericType(_baseType))
+                else if (_baseType.IsGenericTypeDefinition && type.IsGenericTypeDefinition && type.IsChildTypeOfGenericType(_baseType))
                 {
                     foreach (var interfaceType in type.ImplementedInterfaces)
                     {
@@ -67,6 +66,7 @@ namespace Lazy.Kernel.Dependency
                 }
                 else
                     return;
+
                 if (serviceContainSelf)
                     services.Add(type);
 

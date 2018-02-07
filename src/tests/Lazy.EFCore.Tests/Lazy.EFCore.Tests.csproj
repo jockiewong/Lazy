@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -12,6 +12,8 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lazy.Kernel\Lazy.Kernel.csproj" />
+    <ProjectReference Include="..\..\Lazy.EFBase\Lazy.EFBase.csproj" />
+    <ProjectReference Include="..\..\Lazy.EFCore\Lazy.EFCore.csproj" />
+    <ProjectReference Include="..\..\Lazy.Utilities\Lazy.Utilities.csproj" />
   </ItemGroup>
 </Project>

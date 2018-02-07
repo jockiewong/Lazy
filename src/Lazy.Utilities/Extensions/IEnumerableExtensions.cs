@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 namespace Lazy.Utilities.Extensions
 {
     public static class IEnumerableExtensions
