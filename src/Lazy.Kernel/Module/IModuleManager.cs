@@ -12,15 +12,26 @@ namespace Lazy.Kernel.Module
     public interface IModuleManager
     {
         /// <summary>
-        /// 所有的模块,平行结构
+        /// 已加载的所有模块
         /// </summary>
-        ICollection<ModuleDescriptor> AllModule { get; }
+        ICollection<ModuleDescriptor> LoadedAllModule { get; }
 
         /// <summary>
-        /// 从入口程序集与启动参数初始化模块
+        /// 加载所有的模块
         /// </summary>
         /// <param name="entryAssembly"></param>
-        /// <param name="options"></param>
-        void Init(Assembly entryAssembly, StartupOptions options);
+        void LoadAllModule(Assembly entryAssembly);
+
+        /// <summary>
+        /// 配置所有的模块服务
+        /// </summary>
+        /// <param name="lazyBuilder"></param>
+        void ConfigureAllModuleService(ILazyBuilder lazyBuilder);
+
+        /// <summary>
+        /// 初始化所有的模块
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        void InitAllModule(IServiceProvider serviceProvider);
     }
 }

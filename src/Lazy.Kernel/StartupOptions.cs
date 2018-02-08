@@ -16,7 +16,7 @@ namespace Lazy.Kernel
         /// <summary>
         /// 服务提供器集合,默认为ConventionServiceDescriptorFinder
         /// </summary>
-        public ICollection<IServiceDescriptorProvider> ServiceProvider { get; } = new List<IServiceDescriptorProvider>() {
+        public ICollection<IServiceDescriptorProvider> ServiceDescriptorProviders { get; } = new List<IServiceDescriptorProvider>() {
             new ConventionServiceDescriptorProvider()
         };
 
@@ -29,6 +29,6 @@ namespace Lazy.Kernel
         /// 服务注册时是否包含实现类本身,默认为false
         /// <para>如:IUser的实现类User,是否注册User类为服务,默认不注册</para>
         /// </summary>
-        public bool ServiceContainSelf { get; set; } = false;
+        public bool ServiceContainsSelf { get; set; } = false;
     }
 }

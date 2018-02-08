@@ -7,11 +7,20 @@ namespace Lazy.Kernel
 {
     class LazyBuilder : ILazyBuilder
     {
-        public LazyBuilder(IServiceCollection serviceCollection)
+        public IServiceCollection ServiceCollection { get; }
+
+        public static ILazyBuilder Instance { get; private set; }
+
+        private LazyBuilder(IServiceCollection serviceCollection)
         {
             ServiceCollection = serviceCollection;
         }
 
-        public IServiceCollection ServiceCollection { get; }
+        public static void Init(IServiceCollection serviceCollection)
+        {
+            if (Instance != null)
+                return;
+            Instance = new LazyBuilder(serviceCollection);
+        }
     }
 }

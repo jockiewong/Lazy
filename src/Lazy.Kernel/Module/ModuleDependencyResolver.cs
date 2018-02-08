@@ -15,15 +15,6 @@ namespace Lazy.Kernel.Module
     /// </summary>
     public class ModuleDependencyResolver : IModuleDependencyResolver
     {
-        //IServiceCollection _serviceCollection;
-
-        //public ModuleDependencyResolver(
-        //    IServiceCollection serviceCollection
-        //    )
-        //{
-        //    _serviceCollection = serviceCollection;
-        //}
-
         /// <summary>
         /// 引用了如下程序集的库视为候选模块程序集
         /// </summary>

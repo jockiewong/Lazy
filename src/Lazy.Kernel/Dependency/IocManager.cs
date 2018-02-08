@@ -10,7 +10,7 @@ namespace Lazy.Kernel.Dependency
     /// </summary>
     public class IocManager : IIocManager
     {
-        public IocManager(IServiceCollection serviceCollection)
+        internal IocManager(IServiceCollection serviceCollection)
         {
             this.ServiceCollection = serviceCollection;
             Instance = this;

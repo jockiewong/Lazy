@@ -15,6 +15,11 @@ namespace Lazy.Kernel.Dependency
     {
         public IEnumerable<ServiceDescriptor> FromAssembly(Assembly assembly, bool serviceContainSelf)
         {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
             var types = assembly
                             .DefinedTypes
                             .Where(r => !r.IsAbstract && r.IsClass && r.BaseType != null)

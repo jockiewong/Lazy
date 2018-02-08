@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace Lazy.Kernel
 {
@@ -30,31 +31,21 @@ namespace Lazy.Kernel
             Action<StartupOptions> optionsAction = null)
             where TStartupModuleType : LazyModule
         {
-            //TODO:..加入日志记录器
             services.Configure(optionsAction ?? (r => { }));
-
+            LazyBuilder.Init(services);
             KernelServiceInstaller.Installer(services);
             StartupOptions options = new StartupOptions();
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 scope.ServiceProvider.GetRequiredService<IConfigureOptions<StartupOptions>>().Configure(options);
                 var moduleManager = scope.ServiceProvider.GetRequiredService<IModuleManager>();
-                moduleManager.Init(typeof(TStartupModuleType).Assembly, options);
-
-                moduleManager.AllModule.ForEach_(r =>
-                {
-                    services.TryAddSingleton(r.ModuleType, r.ModuleType);
-                    options.ServiceProvider.ForEach_(a =>
-                    {
-                        var serviceDescriptors = a.FromAssembly(r.Assembly, options.ServiceContainSelf);
-                        services.Add(serviceDescriptors);
-                    });
-                });
+                moduleManager.LoadAllModule(typeof(TStartupModuleType).Assembly);
+                moduleManager.ConfigureAllModuleService(LazyBuilder.Instance);
 
                 //不同的provider,单例也不是单例,所以replace
                 services.Replace(ServiceDescriptor.Singleton(moduleManager));
                 //不同的provider,因为LazyBuilder的注册使用的new一个实例,所以单例还是单例
-                return scope.ServiceProvider.GetService<ILazyBuilder>();
+                return LazyBuilder.Instance;
             }
         }
 
@@ -65,17 +56,7 @@ namespace Lazy.Kernel
         public static void UseLazy(this IServiceProvider serviceProvider)
         {
             var moduleManager = serviceProvider.GetRequiredService<IModuleManager>();
-
-            moduleManager.AllModule.ForEach_(r =>
-            {
-                r.Instance = serviceProvider.GetRequiredService(r.ModuleType) as LazyModule;
-
-                r.Instance.OnInit();
-            });
-            moduleManager.AllModule.ForEach_(r =>
-            {
-                r.Instance.OnInited();
-            });
+            moduleManager.InitAllModule(serviceProvider);
         }
     }
 }

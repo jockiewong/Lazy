@@ -21,7 +21,7 @@ namespace Lazy.Kernel.Dependency
 
         public BaseOnServiceDescriptorProvider(Type baseType, ServiceLifetime serviceLifetime)
         {
-            _baseType = baseType.GetTypeInfo() ?? throw new ArgumentNullException(nameof(baseType));
+            _baseType = baseType?.GetTypeInfo() ?? throw new ArgumentNullException(nameof(baseType));
             _serviceLifetime = serviceLifetime;
         }
 
