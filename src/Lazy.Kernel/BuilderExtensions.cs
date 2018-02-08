@@ -17,10 +17,7 @@ namespace Lazy.Kernel
     {
 
         /// <summary>
-        /// 增加lazy框架依赖注入,已注入以下接口,如需替换服务,请在调用该方法前注册服务
-        /// <para><see cref="IModuleDependencyResolver"/>模块依赖解析器</para>
-        /// <para><see cref="IModuleManager"/>模块管理器</para>
-        /// <para><see cref="Lazy.Kernel.Dependency.IIocManager"/>依赖注入管理器</para>
+        /// 增加lazy框架依赖注入,已注入以下接口,如需替换内部服务,请在调用该方法前注册服务
         /// </summary>
         /// <param name="services">服务集合</param>
         /// <param name="entryAssembly">入口程序集</param>
@@ -34,10 +31,9 @@ namespace Lazy.Kernel
             services.Configure(optionsAction ?? (r => { }));
             LazyBuilder.Init(services);
             KernelServiceInstaller.Installer(services);
-            StartupOptions options = new StartupOptions();
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
-                scope.ServiceProvider.GetRequiredService<IConfigureOptions<StartupOptions>>().Configure(options);
+                var options = scope.ServiceProvider.GetRequiredService<IModuleOptionProvider<StartupOptions>>().GetConfiguredOptions();
                 var moduleManager = scope.ServiceProvider.GetRequiredService<IModuleManager>();
                 moduleManager.LoadAllModule(typeof(TStartupModuleType).Assembly);
                 moduleManager.ConfigureAllModuleService(LazyBuilder.Instance);

@@ -67,12 +67,12 @@ namespace Lazy.Kernel.Module
                     };
                 }
             });
-            _logger.LogDebug($"Begin load all module from entry assembly {entryAssembly},Plugin assemblys contains {_startupOptions.Plugins.Select(r => r.PluginAssembly.FullName).Join(",")}");
+            _logger.LogInformation($"Begin load all module from entry assembly {entryAssembly},Plugin assemblys contains [{_startupOptions.Plugins.Select(r => r.PluginAssembly.FullName).Join(",")}]");
             HashSet<ModuleDescriptor> allModule = new HashSet<ModuleDescriptor>();
 
             _result = ModuleDependencyResolver.DependencyResolve(assemblies);
 
-            _logger.LogDebug($"All module has loaded,Plugin module contains {_result.ParallelResult.Values.Select(r => r.ModuleType.FullName).Join(",")}");
+            _logger.LogInformation($"All module has loaded,Plugin module contains [{_result.ParallelResult.Values.Select(r => r.ModuleType.FullName).Join(",")}]");
         }
 
         public void InitAllModule(IServiceProvider serviceProvider)
