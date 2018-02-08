@@ -15,6 +15,6 @@ namespace Lazy.Kernel.Module
         /// </summary>
         /// <param name="entryAssemblies"></param>
         /// <returns></returns>
-        ModuleDependencyResolvedWrapper DependencyResolve(IEnumerable<Assembly> entryAssemblies);
+        ModuleResolvedResult DependencyResolve(IEnumerable<Assembly> entryAssemblies);
     }
 }

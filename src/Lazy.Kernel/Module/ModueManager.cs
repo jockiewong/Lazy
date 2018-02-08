@@ -31,21 +31,21 @@ namespace Lazy.Kernel.Module
         StartupOptions _startupOptions;
         IModuleDependencyResolver ModuleDependencyResolver { get; }
 
-        public ICollection<ModuleDescriptor> LoadedAllModule
+        public ModuleResolvedResult ModuleResolvedResult
         {
             get
             {
-                if (_allModule == null)
+                if (_result == null)
                 {
                     var ex = new KernelException("module manager has not init");
                     _logger.LogError(ex, $"Modules has not load ,please call LoadAllModule method first");
                     throw ex;
                 }
-                return _allModule;
+                return _result;
             }
         }
 
-        ICollection<ModuleDescriptor> _allModule;
+        ModuleResolvedResult _result;
 
         public void LoadAllModule(Assembly entryAssembly)
         {
@@ -70,10 +70,9 @@ namespace Lazy.Kernel.Module
             _logger.LogDebug($"Begin load all module from entry assembly {entryAssembly},Plugin assemblys contains {_startupOptions.Plugins.Select(r => r.PluginAssembly.FullName).Join(",")}");
             HashSet<ModuleDescriptor> allModule = new HashSet<ModuleDescriptor>();
 
-            var resolvedResult = ModuleDependencyResolver.DependencyResolve(assemblies);
+            _result = ModuleDependencyResolver.DependencyResolve(assemblies);
 
-            _allModule = resolvedResult.ParallelResult.Values;
-            _logger.LogDebug($"All module has loaded,Plugin module contains {_allModule.Select(r => r.ModuleType.FullName).Join(",")}");
+            _logger.LogDebug($"All module has loaded,Plugin module contains {_result.ParallelResult.Values.Select(r => r.ModuleType.FullName).Join(",")}");
         }
 
         public void InitAllModule(IServiceProvider serviceProvider)
@@ -83,13 +82,13 @@ namespace Lazy.Kernel.Module
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            LoadedAllModule.ForEach_(r =>
+            ModuleResolvedResult.ParallelResult.Values.ForEach_(r =>
             {
                 r.Instance = serviceProvider.GetRequiredService(r.ModuleType) as LazyModule;
 
                 r.Instance.OnInit();
             });
-            LoadedAllModule.ForEach_(r =>
+            ModuleResolvedResult.ParallelResult.Values.ForEach_(r =>
             {
                 r.Instance.OnInited();
             });
@@ -102,7 +101,7 @@ namespace Lazy.Kernel.Module
                 throw new ArgumentNullException(nameof(lazyBuilder));
             }
 
-            LoadedAllModule.ForEach_(module =>
+            ModuleResolvedResult.ParallelResult.Values.ForEach_(module =>
             {
                 if (module.ModuleConfigureInstance != null)
                     module.ModuleConfigureInstance.Configure(lazyBuilder);

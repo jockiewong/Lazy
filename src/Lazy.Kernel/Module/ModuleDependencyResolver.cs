@@ -31,7 +31,7 @@ namespace Lazy.Kernel.Module
         /// </summary>
         /// <param name="entryAssemblies">入口程序集</param>
         /// <returns></returns>
-        public ModuleDependencyResolvedWrapper DependencyResolve(IEnumerable<Assembly> entryAssemblies)
+        public ModuleResolvedResult DependencyResolve(IEnumerable<Assembly> entryAssemblies)
         {
             if (entryAssemblies.IsNullOrEmpty())
             {
@@ -43,7 +43,7 @@ namespace Lazy.Kernel.Module
             {
                 var entryModuleType = GetModuleType(entryAssembly);
                 if (entryModuleType == null)
-                    throw new Exception($"entryAssembly {entryAssembly} is not contain LazyModule Type");
+                    throw new KernelException($"entryAssembly {entryAssembly} is not contain LazyModule Type");
                 var configType = GetModuleConfigureType(entryAssembly);
                 ModuleDescriptor entryModuleDescriptor = new ModuleDescriptor()
                 {
@@ -89,7 +89,7 @@ namespace Lazy.Kernel.Module
                 modules.Add(entryModuleDescriptor);
             }
 
-            return new ModuleDependencyResolvedWrapper(modules, _allModuleDesciptors);
+            return new ModuleResolvedResult(modules, _allModuleDesciptors);
         }
 
         /// <summary>

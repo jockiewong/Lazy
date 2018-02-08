@@ -14,7 +14,7 @@ namespace Lazy.Kernel.Module
         /// <summary>
         /// 已加载的所有模块
         /// </summary>
-        ICollection<ModuleDescriptor> LoadedAllModule { get; }
+        ModuleResolvedResult ModuleResolvedResult { get; }
 
         /// <summary>
         /// 加载所有的模块

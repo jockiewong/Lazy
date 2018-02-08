@@ -12,7 +12,8 @@ using System.IO;
 using Test1;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-
+using Microsoft.Extensions.Logging.Debug;
+using Microsoft.Extensions.Logging.Console;
 namespace Lazy.Kernel.Tests
 {
     public class Module_Tests
@@ -20,13 +21,9 @@ namespace Lazy.Kernel.Tests
         [Fact]
         public void Test()
         {
-            
+
             IServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging(r =>
-            {
-
-
-            });
+            serviceCollection.AddLogging();
             serviceCollection.AddLazy<TestStartupModule>(r =>
             {
                 var path = Path.Combine(
@@ -42,15 +39,14 @@ namespace Lazy.Kernel.Tests
             });
 
             var provider = serviceCollection.BuildServiceProvider();
-
             provider.UseLazy();
 
             var moduleManager = provider.GetService<IModuleManager>();
 
-            moduleManager.LoadedAllModule.Count.ShouldBe(4);
+            moduleManager.ModuleResolvedResult.ParallelResult.Count.ShouldBe(4);
 
-            moduleManager.LoadedAllModule.FirstOrDefault(r => r.ModuleType == typeof(TestStartupModule)).ShouldNotBeNull();
-            moduleManager.LoadedAllModule.FirstOrDefault(r => r.ModuleType == typeof(Module1)).ShouldNotBeNull();
+            moduleManager.ModuleResolvedResult.ParallelResult.Values.FirstOrDefault(r => r.ModuleType == typeof(TestStartupModule)).ShouldNotBeNull();
+            moduleManager.ModuleResolvedResult.ParallelResult.Values.FirstOrDefault(r => r.ModuleType == typeof(Module1)).ShouldNotBeNull();
         }
     }
 
