@@ -5,14 +5,14 @@ using System.Text;
 
 namespace Lazy.Kernel.Module.PluginModule
 {
-    public class PluginCollection : List<PluginDescriptor>
+    public class PluginCollection : List<PluginInfo>
     {
         public void AddByDefaultResolver(Assembly pluginAssembly)
         {
-            this.Add(new PluginDescriptor
+            this.Add(new PluginInfo
             {
                 PluginAssembly = pluginAssembly,
-                DependAssemblyResolver = new DefaultPluginDependAssemblyResolver()
+                PluginInitialize = new DefaultPluginInitialize()
             });
         }
     }

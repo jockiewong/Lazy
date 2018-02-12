@@ -28,11 +28,16 @@ namespace Lazy.Kernel
             Action<StartupOptions> optionsAction = null)
             where TStartupModuleType : LazyModule
         {
-            services.Configure(optionsAction ?? (r => { }));
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            if (optionsAction != null)
+                services.Configure(optionsAction);
             LazyBuilder.Init(services);
             KernelServiceInstaller.Installer(services);
             using (var scope = services.BuildServiceProvider().CreateScope())
-            {
+            {                
                 var options = scope.ServiceProvider.GetRequiredService<IModuleOptionProvider<StartupOptions>>().GetConfiguredOptions();
                 var moduleManager = scope.ServiceProvider.GetRequiredService<IModuleManager>();
                 moduleManager.LoadAllModule(typeof(TStartupModuleType).Assembly);

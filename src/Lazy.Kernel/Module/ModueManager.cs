@@ -59,13 +59,7 @@ namespace Lazy.Kernel.Module
             _startupOptions.Plugins.ForEach_(r =>
             {
                 assemblies.Add(r.PluginAssembly);
-                if (r.DependAssemblyResolver != null)
-                {
-                    AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
-                    {
-                        return r.DependAssemblyResolver.AssemblyResolve(r.PluginAssembly, sender, e);
-                    };
-                }
+                r.PluginInitialize?.Init(r.PluginAssembly);
             });
             _logger.LogInformation($"Begin load all module from entry assembly {entryAssembly},Plugin assemblys contains [{_startupOptions.Plugins.Select(r => r.PluginAssembly.FullName).Join(",")}]");
             HashSet<ModuleDescriptor> allModule = new HashSet<ModuleDescriptor>();

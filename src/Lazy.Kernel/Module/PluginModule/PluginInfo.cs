@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazy.Kernel.Module.PluginModule
 {
-    public class PluginDescriptor
+    public class PluginInfo
     {
         /// <summary>
         /// 插件程序集
@@ -13,8 +13,8 @@ namespace Lazy.Kernel.Module.PluginModule
         public Assembly PluginAssembly { get; set; }
 
         /// <summary>
-        /// 插件依赖解析器
+        /// 插件初始化器
         /// </summary>
-        public IPluginDependAssemblyResolver DependAssemblyResolver { get; set; }
+        public IPluginInitialize PluginInitialize { get; set; }
     }
 }

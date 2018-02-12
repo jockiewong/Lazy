@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazy.Utilities.Extensions
 {
-    public static class JsonExtensions
+    public static class JsonHelper
     {
         /// <summary>
         /// json序列化,默认设置ReferenceLoopHandling.Ignore,Formatting.Indented
@@ -14,7 +14,7 @@ namespace Lazy.Utilities.Extensions
         /// <param name="obj"></param>
         /// <param name="jsonSerializerSettings"></param>
         /// <returns></returns>
-        public static string ToJson(object obj, JsonSerializerSettings jsonSerializerSettings = null)
+        public static string ToJson(this object obj, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (obj == null)
                 return null;
