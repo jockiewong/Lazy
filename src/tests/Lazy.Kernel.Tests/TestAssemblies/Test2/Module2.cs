@@ -21,14 +21,10 @@ namespace Test2
             configureOptions.GetConfiguredOptions().Name.ShouldBe("老王2");
         }
 
-        public override void OnInit()
+        public override void ConfigureService(ILazyBuilder lazyBuilder)
         {
-            base.OnInit();
-        }
-
-        public override void OnInited()
-        {
-            base.OnInited();
+            lazyBuilder.Test2Option(r => { r.Name = "老王2"; })
+                .Test3Option(r => r.Name = "老王3");
         }
     }
 
@@ -54,15 +50,4 @@ namespace Test2
 
     public interface ITest2 : ISingleton { }
     public class Test2 : ITest2 { }
-
-
-    public class Config : IModuleConfigure
-    {
-        public void Configure(ILazyBuilder lazyBuilder)
-        {
-            lazyBuilder.Test2Option(r => { r.Name = "老王2"; })
-                .Test3Option(r => r.Name = "老王3");
-
-        }
-    }
 }

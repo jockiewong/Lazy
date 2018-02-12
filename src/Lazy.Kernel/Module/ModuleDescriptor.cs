@@ -27,16 +27,6 @@ namespace Lazy.Kernel.Module
         public LazyModule Instance { get; internal set; }
 
         /// <summary>
-        /// 模块服务配置类型,可能为空
-        /// </summary>
-        public TypeInfo ModuleConfigureType { get; internal set; }
-
-        /// <summary>
-        /// 模块服务配置类实例,可能为空
-        /// </summary>
-        public IModuleConfigure ModuleConfigureInstance { get; internal set; }
-
-        /// <summary>
         /// 递归结构的依赖信息
         /// </summary>
         public ICollection<ModuleDescriptor> Dependencies { get; internal set; } = new List<ModuleDescriptor>();

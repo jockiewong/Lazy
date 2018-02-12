@@ -80,11 +80,11 @@ namespace Lazy.Kernel.Module
             {
                 r.Instance = serviceProvider.GetRequiredService(r.ModuleType) as LazyModule;
 
-                r.Instance.OnInit();
+                r.Instance.OnInit(serviceProvider);
             });
             ModuleResolvedResult.ParallelResult.Values.ForEach_(r =>
             {
-                r.Instance.OnInited();
+                r.Instance.OnInited(serviceProvider);
             });
         }
 
@@ -97,8 +97,7 @@ namespace Lazy.Kernel.Module
 
             ModuleResolvedResult.ParallelResult.Values.ForEach_(module =>
             {
-                if (module.ModuleConfigureInstance != null)
-                    module.ModuleConfigureInstance.Configure(lazyBuilder);
+                module.Instance?.ConfigureService(lazyBuilder);
 
                 lazyBuilder.ServiceCollection.TryAddSingleton(module.ModuleType, module.ModuleType);
                 _startupOptions.ServiceDescriptorProviders.ForEach_(provider =>

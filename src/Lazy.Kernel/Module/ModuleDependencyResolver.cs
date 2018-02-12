@@ -44,13 +44,11 @@ namespace Lazy.Kernel.Module
                 var entryModuleType = GetModuleType(entryAssembly);
                 if (entryModuleType == null)
                     throw new KernelException($"entryAssembly {entryAssembly} is not contain LazyModule Type");
-                var configType = GetModuleConfigureType(entryAssembly);
                 ModuleDescriptor entryModuleDescriptor = new ModuleDescriptor()
                 {
                     Assembly = entryAssembly,
                     ModuleType = entryModuleType,
-                    ModuleConfigureType = configType,
-                    ModuleConfigureInstance = configType == null ? null : (IModuleConfigure)Activator.CreateInstance(configType)
+                    Instance = Activator.CreateInstance(entryModuleType) as LazyModule
                 };
 
                 var context = DependencyContext.Load(entryAssembly);
@@ -77,7 +75,6 @@ namespace Lazy.Kernel.Module
                             if (type != null)
                             {
                                 r.ModuleType = type;
-                                r.ConfigureType = GetModuleConfigureType(r.Assembly);
                                 moduleDependencyInfo.Add(r.Name, r);
                             }
                         });
@@ -126,8 +123,7 @@ namespace Lazy.Kernel.Module
                     {
                         Assembly = dependency.Assembly,
                         ModuleType = dependency.ModuleType,
-                        ModuleConfigureType = dependency.ConfigureType,
-                        ModuleConfigureInstance = dependency.ConfigureType == null ? null : (IModuleConfigure)Activator.CreateInstance(dependency.ConfigureType)
+                        Instance = Activator.CreateInstance(dependency.ModuleType) as LazyModule
                     };
                     FillDependencies(descriptor);
                     moduleDescriptor.Dependencies.Add(descriptor);
@@ -144,11 +140,6 @@ namespace Lazy.Kernel.Module
         private TypeInfo GetModuleType(Assembly assembly)
         {
             return assembly.DefinedTypes.FirstOrDefault(r => !r.IsAbstract && r.IsClass && r.IsChildTypeOf<LazyModule>());
-        }
-
-        private TypeInfo GetModuleConfigureType(Assembly assembly)
-        {
-            return assembly.DefinedTypes.FirstOrDefault(r => !r.IsAbstract && r.IsClass && r.IsChildTypeOf<IModuleConfigure>());
         }
 
         /// <summary>
@@ -278,8 +269,6 @@ namespace Lazy.Kernel.Module
             public string Name { get; set; }
 
             public TypeInfo ModuleType { get; set; }
-
-            public TypeInfo ConfigureType { get; set; }
 
             public RuntimeLibrary Library { get; set; }
 

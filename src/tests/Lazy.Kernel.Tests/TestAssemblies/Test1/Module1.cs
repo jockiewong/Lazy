@@ -20,16 +20,6 @@ namespace Test1
 
             test1Options.Name.ShouldBe("老王1");
         }
-
-        public override void OnInit()
-        {
-            base.OnInit();
-        }
-
-        public override void OnInited()
-        {
-            base.OnInited();
-        }
     }
 
     public class Test1Options
