@@ -11,14 +11,12 @@ namespace Test1
 {
     public class Module1 : LazyModule
     {
-        public Module1(
-            IModuleOptionProvider<Test1Options> moduleOption,
-            IModuleOptionProvider<Test1Options2> moduleOption2
-            )
+        public override void OnInit(IServiceProvider serviceProvider)
         {
-            var test1Options = moduleOption.GetConfiguredOptions();
 
-            test1Options.Name.ShouldBe("老王1");
+            serviceProvider.GetService<IModuleOptionProvider<Test1Options>>().GetConfiguredOptions().Name.ShouldBe("老王1");
+            serviceProvider.GetService<IModuleOptionProvider<Test1Options>>();
+            base.OnInit(serviceProvider);
         }
     }
 

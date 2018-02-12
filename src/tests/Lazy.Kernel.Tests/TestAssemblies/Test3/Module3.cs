@@ -11,18 +11,17 @@ namespace Test3
 {
     public class Module3 : LazyModule
     {
-        public Module3(IModuleOptionProvider<Test3Options> configureOptions
-            )
-        {
-            configureOptions.GetConfiguredOptions().Name.ShouldBe("老王3");
-        }
-
         public override void ConfigureService(ILazyBuilder lazyBuilder)
         {
             lazyBuilder.Test3Option(r =>
             {
                 r.Name = "老王33333";
             });
+        }
+
+        public override void OnInit(IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetService<IModuleOptionProvider<Test3Options>>().GetConfiguredOptions().Name.ShouldBe("老王3");
         }
     }
 

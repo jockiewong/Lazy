@@ -72,6 +72,12 @@ namespace Lazy.Kernel.Module
                             if (moduleDependencyInfo.ContainsKey(r.Name))
                                 return;
                             var type = GetModuleType(r.Assembly);
+                            var isContainsNoParameterConstructor = type.DeclaredConstructors.Any(c => !c.GetParameters().Any());
+                            if (!isContainsNoParameterConstructor)
+                            {
+                                return;
+                            }
+
                             if (type != null)
                             {
                                 r.ModuleType = type;
