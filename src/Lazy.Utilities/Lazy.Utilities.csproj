@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-
   <ItemGroup>
-    <Folder Include="Excel\" />
-    <Folder Include="Web\" />
+    <Compile Remove="Excel\**" />
+    <Compile Remove="Web\**" />
+    <EmbeddedResource Remove="Excel\**" />
+    <EmbeddedResource Remove="Web\**" />
+    <None Remove="Excel\**" />
+    <None Remove="Web\**" />
   </ItemGroup>
 
   <ItemGroup>
