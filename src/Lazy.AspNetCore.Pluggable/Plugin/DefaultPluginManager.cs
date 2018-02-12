@@ -10,6 +10,8 @@ using Lazy.Kernel.Module.PluginModule;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Lazy.AspNetCore.Pluggable.Plugin
 {
@@ -79,12 +81,33 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
                 try
                 {
                     string pluginFolderName = Path.GetFileName(item);
-                    PluginDescriptor pluginDescriptor = new PluginDescriptor();
-                    var model = JsonHelper.DeserializeFromFile<PluginModel>(pluginPath);
 
-                    pluginDescriptor.PluginModel = model;
-                    model.DllFileName = model.DllFileName ?? pluginFolderName;
-                    model.Name = model.Name ?? pluginFolderName;
+                    var jObject = JsonConvert.DeserializeObject(pluginPath) as JObject;
+                    var name = jObject.GetValue("Name")?.Value<string>() ?? pluginFolderName;
+                    var enabled = jObject.GetValue("Enabled")?.Value<bool>() ?? false;
+                    var dllFileName = jObject.GetValue("DllFileName")?.Value<string>() ?? pluginFolderName;
+                    var description = jObject.GetValue("Description")?.Value<string>();
+                    var author = jObject.GetValue("Author")?.Value<string>();
+                    var category = jObject.GetValue("Category")?.Value<string>();
+                    var version = jObject.GetValue("Version")?.Value<string>();
+                    var dependencies = (jObject.GetValue("Dependencies") as JArray)?.Select(r => r.Value<string>()).ToList();
+
+                    var model = new PluginModel(
+                        enabled,
+                        name,
+                        dllFileName,
+                        description,
+                        author,
+                        category,
+                        version,
+                        dependencies
+                        );
+
+                    PluginDescriptor pluginDescriptor = new PluginDescriptor(
+                        pluginFolderName,
+                        pluginPath,
+                        model
+                        );
 
                     var dll = Directory.EnumerateFiles(item, model.DllFileName, SearchOption.AllDirectories)?.FirstOrDefault();
                     if (dll.IsNullOrWhiteSpace())
@@ -94,9 +117,6 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
                     }
 
                     var pluginAssembly = Assembly.LoadFrom(dll);
-
-                    pluginDescriptor.FileLocation = pluginPath;
-                    pluginDescriptor.Id = pluginFolderName;
                     pluginDescriptor.PluginAssembly = pluginAssembly;
                     pluginDescriptor.PluginInitialize = new DefaultPluginInitialize();
                     _pluginCollection.Add(pluginDescriptor);
@@ -134,7 +154,7 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
                 _logger.LogError($"Plugin [{id}] is not exists.");
                 return;
             }
-            plugin.PluginModel.Enabled = true;
+            plugin.PluginModel.SetStatus(true);
 
             await JsonHelper.SerializeToFileAsync(plugin.PluginModel, plugin.FileLocation);
             _logger.LogInformation($"Plugin [{id}] has been enabled.");
@@ -153,7 +173,7 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
                 _logger.LogError($"Plugin [{id}] is not exists.");
                 return;
             }
-            plugin.PluginModel.Enabled = false;
+            plugin.PluginModel.SetStatus(false);
             await JsonHelper.SerializeToFileAsync(plugin.PluginModel, plugin.FileLocation);
             _logger.LogInformation($"Plugin [{id}] has been disabled.");
         }

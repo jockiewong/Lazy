@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Routing;
+using Lazy.Kernel.Module;
 
 namespace Lazy.AspNetCore.Pluggable
 {
@@ -30,15 +33,26 @@ namespace Lazy.AspNetCore.Pluggable
             return path;
         }
 
-        //public static string MapPathPlugin(string path)
-        //{
-        //    return path;
-        //}
+        public static string MapPathPlugin(this HttpContext httpContext, string path)
+        {
+            var id = httpContext.GetRouteData()?.DataTokens[Const.PluginAreaKey]?.ToString();
+            if (id == null)
+                return MapPath(path);
 
-        //public static string MapPathPluginWebRoot(string path)
-        //{
-        //    return path;
-        //}
+            var option = httpContext.RequestServices.GetRequiredService<IModuleOptionProvider<PluggableOptions>>().GetConfiguredOptions();
+
+            return MapPath(MapPath(Path.Combine(option.PluginSourceLocation, id)), path);
+        }
+
+        public static string MapPathPluginWebRoot(this HttpContext httpContext, string path)
+        {
+            var id = httpContext.GetRouteData()?.DataTokens[Const.PluginAreaKey]?.ToString();
+            if (id == null)
+                return MapPath(path);
+
+            var option = httpContext.RequestServices.GetRequiredService<IModuleOptionProvider<PluggableOptions>>().GetConfiguredOptions();
+            return MapPath(MapPath(Path.Combine(option.PluginSourceLocation, id, "wwwroot")), path);
+        }
 
         private static string MapPath(string root, string path)
         {

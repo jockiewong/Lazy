@@ -7,5 +7,7 @@ namespace Lazy.AspNetCore.Pluggable
     class Const
     {
         public readonly static string PluginDesciptorFileName = "plugin.json";
+
+        public readonly static string PluginAreaKey = "area";
     }
 }

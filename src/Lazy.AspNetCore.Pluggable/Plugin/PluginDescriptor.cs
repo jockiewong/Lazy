@@ -11,19 +11,26 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
     /// </summary>
     public class PluginDescriptor : PluginInfo
     {
+        public PluginDescriptor(string id, string fileLocation, PluginModel pluginModel)
+        {
+            this.Id = id;
+            FileLocation = fileLocation;
+            PluginModel = pluginModel;
+        }
+
         /// <summary>
         /// 插件描述文件位置
         /// </summary>
-        public string FileLocation { get; set; }
+        public string FileLocation { get; }
 
         /// <summary>
         /// 插件id,使用插件的文件夹名称
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; }
 
         /// <summary>
         /// 插件模型数据
         /// </summary>
-        public PluginModel PluginModel { get; set; }
+        public PluginModel PluginModel { get; }
     }
 }

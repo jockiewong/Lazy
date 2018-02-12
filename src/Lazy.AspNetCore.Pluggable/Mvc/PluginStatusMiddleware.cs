@@ -15,7 +15,7 @@ namespace Lazy.AspNetCore.Pluggable.Mvc
     /// </summary>
     public class PluginStatusMiddleware
     {
-        private const string idKey = "area";
+
 
         IPluginManager _pluginManager;
         private readonly RequestDelegate _next;
@@ -28,9 +28,9 @@ namespace Lazy.AspNetCore.Pluggable.Mvc
         public async Task Invoke(HttpContext context)
         {
             var datas = context.GetRouteData().DataTokens;
-            if (datas.ContainsKey(idKey))
+            if (datas.ContainsKey(Const.PluginAreaKey))
             {
-                var pluginId = datas[idKey]?.ToString();
+                var pluginId = datas[Const.PluginAreaKey]?.ToString();
                 if (pluginId == null)
                     await _next.Invoke(context);
                 else
