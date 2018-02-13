@@ -44,10 +44,8 @@ namespace Lazy.WebSample
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.ApplicationServices.UseLazy();
-
             app.UseStaticFiles();
-
+            app.ApplicationServices.UseLazy();
             app.UseLazyAspNetCoreMvcPluggable(r =>
             {
 
