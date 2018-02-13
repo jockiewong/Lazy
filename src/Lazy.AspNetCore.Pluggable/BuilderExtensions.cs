@@ -19,7 +19,7 @@ namespace Lazy.AspNetCore.Pluggable
     public static class BuilderExtensions
     {
         /// <summary>
-        /// 增加mvc插件化,需要在AddLazy之前调用
+        /// 增加mvc插件化,需要在AddLazy之前调用,已包含默认的AddMvc
         /// </summary>
         /// <param name="lazyBuilder"></param>
         /// <param name="optionsAction"></param>
@@ -30,16 +30,11 @@ namespace Lazy.AspNetCore.Pluggable
            Action<PluggableOptions> optionsAction = null)
         {
             if (serviceCollection == null)
-            {
                 throw new ArgumentNullException(nameof(serviceCollection));
-            }
-
-
 
             if (pluginSourceLocation == null)
-            {
                 throw new ArgumentNullException(nameof(pluginSourceLocation));
-            }
+
             PluggableServiceInstaller.Installer(serviceCollection);
 
             serviceCollection.Configure<PluggableOptions>(r => r.PluginSourceLocation = pluginSourceLocation);
@@ -68,9 +63,7 @@ namespace Lazy.AspNetCore.Pluggable
                     throw new KernelException("mvc pluggable option: PluginSourceLocation is null.");
 
                 if (!options.PluginSourceLocation.StartsWith("/"))
-                {
-                    throw new KernelException($"{nameof(pluginSourceLocation)} is not relative path, should start with '/'.");
-                }
+                    throw new KernelException($"{nameof(pluginSourceLocation)} isn't relative path, should start with '/'.");
 
                 pluginManager.Plugins.ForEach(r => mvcBuilder.AddApplicationPart(r.PluginAssembly));
 
@@ -79,9 +72,11 @@ namespace Lazy.AspNetCore.Pluggable
                     r.Plugins.AddRange(pluginManager.Plugins);
                 });
 
+                var viewConfigure = scope
+                   .ServiceProvider.GetRequiredService<IPluginViewConfigure>();
                 mvcBuilder.AddRazorOptions(r =>
                 {
-                    r.AreaViewLocationFormats.Add(options.PluginSourceLocation.TrimEnd('/') + "/{2}/Views/{1}/{0}.cshtml");
+                    viewConfigure.Configure(r);
                 });
 
                 serviceCollection.Replace(ServiceDescriptor.Singleton(pluginManager));
@@ -90,7 +85,12 @@ namespace Lazy.AspNetCore.Pluggable
             return serviceCollection;
         }
 
-
+        /// <summary>
+        /// 使用asp.net core mvc 插件化,已包含UseMvc
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="configureRoutes"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseLazyAspNetCoreMvcPluggable(
             this IApplicationBuilder app,
             Action<IRouteBuilder> configureRoutes = null

@@ -14,6 +14,7 @@ namespace Lazy.AspNetCore.Pluggable
         {
             services.TryAddSingleton<IPluginManager, DefaultPluginManager>();
             services.TryAddSingleton<IPluginRouterRegister, DefaultPluginRouterRegister>();
+            services.TryAddSingleton<IPluginViewConfigure, DefaultPluginViewConfigure>();
         }
     }
 }
