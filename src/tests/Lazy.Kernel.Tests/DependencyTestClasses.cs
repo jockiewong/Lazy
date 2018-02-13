@@ -1,4 +1,4 @@
-﻿using Lazy.Kernel.Dependency;
+﻿ using Lazy.Kernel.Dependency;
 using System;
 using System.Collections.Generic;
 using System.Text;

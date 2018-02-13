@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazy.AspNetCore.Pluggable
@@ -18,7 +19,7 @@ namespace Lazy.AspNetCore.Pluggable
     public static class BuilderExtensions
     {
         /// <summary>
-        /// 增加mvc插件化
+        /// 增加mvc插件化,需要在AddLazy之前调用
         /// </summary>
         /// <param name="lazyBuilder"></param>
         /// <param name="optionsAction"></param>
@@ -95,11 +96,6 @@ namespace Lazy.AspNetCore.Pluggable
             Action<IRouteBuilder> configureRoutes = null
             )
         {
-            var pluginManager = app.ApplicationServices.GetRequiredService<IPluginManager>();
-            var moduleMamager = app.ApplicationServices.GetRequiredService<IModuleManager>();
-
-
-            //app.UseMiddleware<PluginStatusMiddleware>();
             app.UseMvc(routeBuilder =>
             {
                 configureRoutes?.Invoke(routeBuilder);
@@ -108,29 +104,8 @@ namespace Lazy.AspNetCore.Pluggable
                    name: "default",
                    template: "{controller=Home}/{action=Index}/{id?}");
 
-                var inlineConstraintResolver = routeBuilder
-                    .ServiceProvider
-                    .GetRequiredService<IInlineConstraintResolver>();
-
-                pluginManager.Plugins.ForEach(r =>
-                {
-                    routeBuilder.Routes.Add(new PluginRouter(
-                                            pluginManager,
-                                            routeBuilder.DefaultHandler,
-                                            r.Id,
-                                            r.PluginModel.Name + "/{controller=Home}/{action=Index}/{id?}",
-                                            new RouteValueDictionary(new { area = r.Id }),
-                                            null,
-                                            new RouteValueDictionary(new { area = r.Id }),
-                                            inlineConstraintResolver
-                        ));
-                });
-
-                moduleMamager.ModuleResolvedResult.ParallelResult.Values.ForEach_(r =>
-                {
-                    var module = r.Instance as PluginModule;
-                    module?.MapRoute(routeBuilder);
-                });
+                var register = routeBuilder.ServiceProvider.GetRequiredService<IPluginRouterRegister>();
+                register.Regist(routeBuilder);
             });
 
             return app;
