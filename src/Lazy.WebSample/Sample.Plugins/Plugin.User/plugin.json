@@ -1,0 +1,10 @@
+﻿{
+  "Name": "User",
+  "Enabled": false,
+  "DllFileName": "Plugin.User.dll",
+  "Description": "用户管理啊",
+  "Author": "gucao",
+  "Category": "管理后台",
+  "Version": "1.0.0",
+  "Dependencies": []
+}
