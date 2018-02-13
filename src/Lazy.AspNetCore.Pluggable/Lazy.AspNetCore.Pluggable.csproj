@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Mvc\PluginStatusMiddleware.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Lazy.Kernel\Lazy.Kernel.csproj" />
     <ProjectReference Include="..\Lazy.Utilities\Lazy.Utilities.csproj" />
   </ItemGroup>

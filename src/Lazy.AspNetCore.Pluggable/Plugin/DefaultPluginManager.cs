@@ -75,14 +75,14 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
 
             foreach (string item in folders)
             {
-                string pluginPath = Path.Combine(item, Const.PluginDesciptorFileName);
-                if (!File.Exists(pluginPath))
+                string pluginJson = Path.Combine(item, Const.PluginDesciptorFileName);
+                if (!File.Exists(pluginJson))
                     continue;
                 try
                 {
                     string pluginFolderName = Path.GetFileName(item);
 
-                    var jObject = JsonConvert.DeserializeObject(pluginPath) as JObject;
+                    var jObject = JsonHelper.DeserializeFromFile<JObject>(pluginJson);
                     var name = jObject.GetValue("Name")?.Value<string>() ?? pluginFolderName;
                     var enabled = jObject.GetValue("Enabled")?.Value<bool>() ?? false;
                     var dllFileName = jObject.GetValue("DllFileName")?.Value<string>() ?? pluginFolderName;
@@ -105,14 +105,14 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
 
                     PluginDescriptor pluginDescriptor = new PluginDescriptor(
                         pluginFolderName,
-                        pluginPath,
+                        pluginJson,
                         model
                         );
 
                     var dll = Directory.EnumerateFiles(item, model.DllFileName, SearchOption.AllDirectories)?.FirstOrDefault();
                     if (dll.IsNullOrWhiteSpace())
                     {
-                        _logger.LogWarning($"Plugin file [{pluginPath}] can't find dll file [{model.DllFileName}]");
+                        _logger.LogWarning($"Plugin file [{pluginJson}] can't find dll file [{model.DllFileName}]");
                         continue;
                     }
 
@@ -136,7 +136,7 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Load plugin [{pluginPath}] error:{ex.Message}");
+                    _logger.LogError(ex, $"Load plugin [{pluginJson}] error:{ex.Message}");
                 }
             }
         }

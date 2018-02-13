@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Sample.Plugins\**" />
+    <Content Remove="Sample.Plugins\**" />
+    <EmbeddedResource Remove="Sample.Plugins\**" />
+    <None Remove="Sample.Plugins\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
 
@@ -13,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lazy.AspNetCore.Pluggable\Lazy.AspNetCore.Pluggable.csproj" />
     <ProjectReference Include="..\Lazy.Kernel\Lazy.Kernel.csproj" />
   </ItemGroup>
 

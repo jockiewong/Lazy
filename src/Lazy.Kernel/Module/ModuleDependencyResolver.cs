@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyModel;
 using Lazy.Utilities.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Lazy.Kernel.Module
 {
@@ -15,6 +16,12 @@ namespace Lazy.Kernel.Module
     /// </summary>
     public class ModuleDependencyResolver : IModuleDependencyResolver
     {
+        ILogger<ModuleDependencyResolver> _logger;
+        public ModuleDependencyResolver(ILogger<ModuleDependencyResolver> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// 引用了如下程序集的库视为候选模块程序集
         /// </summary>
@@ -72,14 +79,16 @@ namespace Lazy.Kernel.Module
                             if (moduleDependencyInfo.ContainsKey(r.Name))
                                 return;
                             var type = GetModuleType(r.Assembly);
-                            var isContainsNoParameterConstructor = type.DeclaredConstructors.Any(c => !c.GetParameters().Any());
-                            if (!isContainsNoParameterConstructor)
-                            {
-                                return;
-                            }
 
                             if (type != null)
                             {
+                                var isContainsNoParameterConstructor = type.DeclaredConstructors.Any(c => !c.GetParameters().Any());
+                                if (!isContainsNoParameterConstructor)
+                                {
+                                    _logger.LogWarning($"{type} is a lazy module, but no public no parameter constructor info, so skip it.");
+                                    return;
+                                }
+
                                 r.ModuleType = type;
                                 moduleDependencyInfo.Add(r.Name, r);
                             }

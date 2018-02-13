@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Lazy.Kernel;
+using Lazy.AspNetCore.Pluggable;
 namespace Lazy.WebSample
 {
     public class Startup
@@ -23,10 +24,12 @@ namespace Lazy.WebSample
         {
             services.AddMvc();
 
-            services.AddLazy<WebModule>(r =>
-            {
+            services
+                .AddLazyAspNetCoreMvcPluggable("/Sample.Plugins")
+                .AddLazy<WebModule>(r =>
+                {
 
-            });
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,11 +48,10 @@ namespace Lazy.WebSample
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseLazyAspNetCoreMvcPluggable(r =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+
+
             });
         }
     }

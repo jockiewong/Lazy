@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,10 +33,7 @@ namespace Lazy.AspNetCore.Pluggable
                 throw new ArgumentNullException(nameof(serviceCollection));
             }
 
-            if (pluginSourceLocation.StartsWith("/"))
-            {
-                throw new KernelException($"{nameof(pluginSourceLocation)} is not relative path, should start with '/'.");
-            }
+
 
             if (pluginSourceLocation == null)
             {
@@ -54,10 +52,12 @@ namespace Lazy.AspNetCore.Pluggable
                 var host = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
                 Server.Init(host);
 
-                var options = scope
-                    .ServiceProvider
-                    .GetRequiredService<Lazy.Kernel.Module.IModuleOptionProvider<PluggableOptions>>()
-                    .GetConfiguredOptions();
+                PluggableOptions options = new PluggableOptions();
+
+                scope
+                   .ServiceProvider
+                   .GetRequiredService<IConfigureOptions<PluggableOptions>>()
+                   .Configure(options);
 
                 var pluginManager = scope.ServiceProvider.GetRequiredService<IPluginManager>();
 
@@ -65,6 +65,11 @@ namespace Lazy.AspNetCore.Pluggable
 
                 if (options.PluginSourceLocation.IsNullOrWhiteSpace())
                     throw new KernelException("mvc pluggable option: PluginSourceLocation is null.");
+
+                if (!options.PluginSourceLocation.StartsWith("/"))
+                {
+                    throw new KernelException($"{nameof(pluginSourceLocation)} is not relative path, should start with '/'.");
+                }
 
                 pluginManager.Plugins.ForEach(r => mvcBuilder.AddApplicationPart(r.PluginAssembly));
 
@@ -93,27 +98,38 @@ namespace Lazy.AspNetCore.Pluggable
             var pluginManager = app.ApplicationServices.GetRequiredService<IPluginManager>();
             var moduleMamager = app.ApplicationServices.GetRequiredService<IModuleManager>();
 
-            app.UseMiddleware<PluginStatusMiddleware>();
-            app.UseMvc(routes =>
-            {
-                configureRoutes?.Invoke(routes);
 
-                routes.MapRoute(
+            //app.UseMiddleware<PluginStatusMiddleware>();
+            app.UseMvc(routeBuilder =>
+            {
+                configureRoutes?.Invoke(routeBuilder);
+
+                routeBuilder.MapRoute(
                    name: "default",
                    template: "{controller=Home}/{action=Index}/{id?}");
 
+                var inlineConstraintResolver = routeBuilder
+                    .ServiceProvider
+                    .GetRequiredService<IInlineConstraintResolver>();
+
                 pluginManager.Plugins.ForEach(r =>
                 {
-                    routes.MapRoute(r.Id, r.Id + "/{controller=Home}/{action=Index}/{id?}", null, null, new
-                    {
-                        area = r.Id
-                    });
+                    routeBuilder.Routes.Add(new PluginRouter(
+                                            pluginManager,
+                                            routeBuilder.DefaultHandler,
+                                            r.Id,
+                                            r.PluginModel.Name + "/{controller=Home}/{action=Index}/{id?}",
+                                            new RouteValueDictionary(new { area = r.Id }),
+                                            null,
+                                            new RouteValueDictionary(new { area = r.Id }),
+                                            inlineConstraintResolver
+                        ));
                 });
 
                 moduleMamager.ModuleResolvedResult.ParallelResult.Values.ForEach_(r =>
                 {
                     var module = r.Instance as PluginModule;
-                    module?.MapRoute(routes);
+                    module?.MapRoute(routeBuilder);
                 });
             });
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Lazy.WebSample.Models;
-
+using Microsoft.AspNetCore.Routing;
 namespace Lazy.WebSample.Controllers
 {
     public class HomeController : Controller

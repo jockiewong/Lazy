@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Task",
+  "Enabled": true,
+  "DllFileName": "Plugin.Task.dll",
+  "Description": "任务管理啊啊",
+  "Author": "gucao",
+  "Category": "管理后台",
+  "Version": "1.0.0",
+  "Dependencies": []
+}

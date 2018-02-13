@@ -10,6 +10,9 @@ using Lazy.Kernel.Module;
 
 namespace Lazy.AspNetCore.Pluggable
 {
+    /// <summary>
+    /// 静态 服务端路径相关
+    /// </summary>
     public static class Server
     {
         static IHostingEnvironment _hostingEnvironment;
@@ -23,14 +26,12 @@ namespace Lazy.AspNetCore.Pluggable
 
         public static string MapPath(string path)
         {
-            MapPath(_hostingEnvironment.ContentRootPath, path);
-            return path;
+            return MapPath(_hostingEnvironment.ContentRootPath, path);
         }
 
         public static string MapPathWebRoot(string path)
         {
-            MapPath(_hostingEnvironment.WebRootPath, path);
-            return path;
+            return MapPath(_hostingEnvironment.WebRootPath, path);
         }
 
         public static string MapPathPlugin(this HttpContext httpContext, string path)
