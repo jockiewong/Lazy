@@ -1,6 +1,6 @@
 ﻿{
   "Name": "User",
-  "Enabled": false,
+  "Enabled": true,
   "DllFileName": "Plugin.User.dll",
   "Description": "用户管理啊",
   "Author": "gucao",

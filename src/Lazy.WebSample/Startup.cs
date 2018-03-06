@@ -12,8 +12,7 @@ namespace Lazy.WebSample
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
+        public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
 
@@ -26,8 +25,7 @@ namespace Lazy.WebSample
 
             services
                 .AddLazyAspNetCoreMvcPluggable("/Sample.Plugins")
-                .AddLazy<WebModule>(r =>
-                {
+                .AddLazy<WebModule>(r => {
 
                 });
         }
@@ -35,19 +33,16 @@ namespace Lazy.WebSample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
+            else {
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
             app.ApplicationServices.UseLazy();
-            app.UseLazyAspNetCoreMvcPluggable(r =>
-            {
+            app.UseLazyAspNetCoreMvcPluggable(r => {
 
 
             });
