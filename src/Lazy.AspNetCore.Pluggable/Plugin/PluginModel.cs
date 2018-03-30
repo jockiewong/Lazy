@@ -75,6 +75,7 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
         /// <param name="status"></param>
         public void SetStatus(bool status)
         {
+            //TODO:  优化
             Enabled = status;
         }
     }

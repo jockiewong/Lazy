@@ -15,6 +15,7 @@ namespace Lazy.AspNetCore.Pluggable
     /// </summary>
     public static class Server
     {
+        //TODO: 优化
         static IHostingEnvironment _hostingEnvironment;
 
         internal static void Init(IHostingEnvironment hostingEnvironment)

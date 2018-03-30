@@ -31,7 +31,7 @@ namespace Lazy.Utilities.Extensions
             }
             catch (Exception ex)
             {
-                throw new Exception("GetMD5HashFromFile() fail, error:" + ex.Message);
+                throw new Exception("GetMD5Hash() fail, error:" + ex.Message);
             }
         }
     }
