@@ -10,7 +10,4 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Lazy.EF6\Lazy.EF6.csproj" />
-  </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazy.Utilities.Extensions
 {
-    public static class JsonExtensions
+    public static class JsonHelper
     {
         /// <summary>
         /// json序列化,默认设置ReferenceLoopHandling.Ignore,Formatting.Indented

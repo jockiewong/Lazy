@@ -38,7 +38,13 @@ namespace Lazy.Utilities.Extensions
             return IsChildTypeOfGenericType(baseType, genericType);
         }
 
-        public static T ConvertTo<T>(this object value) where T : struct
+        /// <summary>
+        /// 类型转换
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T ConvertTo<T>(this object value)
         {
             if (value == null)
                 return default(T);
@@ -63,7 +69,13 @@ namespace Lazy.Utilities.Extensions
                 return (T)Convert.ChangeType(value, destinationType);
             return (T)value;
         }
-
+        
+        /// <summary>
+        /// 类型转换
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="destinationType">目标类型</param>
+        /// <returns></returns>
         public static object ConvertTo(this object value, Type destinationType)
         {
             if (value == null)
@@ -87,8 +99,6 @@ namespace Lazy.Utilities.Extensions
             throw new Exception($"[{value.GetType()}:{value}]转换为目标类型:[{destinationType}]无效!");
         }
 
-
-        private static Dictionary<Type, List<PropertyInfo>> typePropertyCache = new Dictionary<Type, List<PropertyInfo>>();
         /// <summary>
         /// 将对象属性转换为字典存储
         /// </summary>
@@ -97,14 +107,8 @@ namespace Lazy.Utilities.Extensions
         public static IDictionary<string, object> MapToDictionary(this object obj)
         {
             var dic = new Dictionary<string, object>();
-
             var type = obj.GetType();
-            List<PropertyInfo> props;
-            if (!typePropertyCache.TryGetValue(type, out props))
-            {
-                props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
-                typePropertyCache.Add(type, props);
-            }
+            List<PropertyInfo> props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
             props.ForEach_(r =>
             {
                 if (r != null)

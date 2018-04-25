@@ -45,7 +45,7 @@ namespace Lazy.Utilities.Extensions
             return list.GroupBy(r => r).Any(g => g.Count() > 1);
         }
 
-        public static bool HasRepeat<T>(this IEnumerable<T> list, Func<T, object> selectProperty)
+        public static bool HasRepeat<T, P>(this IEnumerable<T> list, Func<T, P> selectProperty)
         {
             return list.GroupBy(selectProperty).Any(g => g.Count() > 1);
         }

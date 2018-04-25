@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LazyWorks.Utilities;
 using System.Text.RegularExpressions;
 
 namespace Lazy.Utilities.Extensions
@@ -79,24 +78,6 @@ namespace Lazy.Utilities.Extensions
             return result;
         }
 
-        ///// <summary>
-        ///// 将相对路径转换为绝对路径
-        ///// 如: "~/bin/"  to "c:\web\bin\"
-        ///// </summary>
-        ///// <param name="relativePath"></param>
-        ///// <returns></returns>
-        //public static string MapPath(this string relativePath)
-        //{
-        //    if (HostingEnvironment.IsHosted)
-        //    {
-        //        return HostingEnvironment.MapPath(relativePath);
-        //    }
-
-        //    string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        //    relativePath = relativePath.Replace("~/", "").TrimStart('/').Replace('/', '\\');
-        //    return Path.Combine(baseDirectory, relativePath);
-        //}
-
         public static bool Contains(this string source, string value, StringComparison stringComparison)
         {
             if (source == null || value == null) { return false; }
@@ -131,6 +112,24 @@ namespace Lazy.Utilities.Extensions
         public static string ReplaceIgnoreCase(this string str, string pattern, string replaceString)
         {
             return Regex.Replace(str, pattern, replaceString, RegexOptions.IgnoreCase);
+        }
+
+        /// <summary>
+        /// 类型转换,转换不成功返回类型null值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T? TryPrase<T>(this string value) where T : struct
+        {
+            try
+            {
+                return value.ConvertTo<T>();
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using Lazy.EFBase;
-using Lazy.Utilities.Extensions;
+﻿using Lazy.Utilities.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -49,9 +48,8 @@ namespace Lazy.EFCore
                                   DefaultValue = filed.DefaultValue,
                                   Nullable = p.IsNullable,
                                   MaxLength = p.GetMaxLength(),
-                                  IsPrimaryKey = p.IsPrimaryKey()
-                                  //ef6中获取不到外键数据
-                                  //IsForeignKey = p.IsForeignKey()
+                                  IsPrimaryKey = p.IsPrimaryKey(),
+                                  IsForeignKey = p.IsForeignKey()
                               };
                           })
                           .ToList()
@@ -104,7 +102,7 @@ namespace Lazy.EFCore
 
             //所有fluent api配置类
             var configTypes = assembly
-                               .GetTypesSafely()
+                               .DefinedTypes
                                .Where(t =>
                                  !t.IsAbstract && t.BaseType != null && t.IsClass
                                  && t.IsChildTypeOfGenericType(typeof(IEntityTypeConfiguration<>))).ToList();
@@ -128,7 +126,7 @@ namespace Lazy.EFCore
 
             //反射调用Entity方法 注册实体
             assembly
-                .GetTypesSafely()
+                .DefinedTypes
                 .Where(r => !registedTypes.Contains(r))
                 .Where(entityTypePredicate)
                 .ForEach_(r =>
