@@ -69,7 +69,7 @@ namespace Lazy.AspNetCore.Pluggable.Plugin
             {
                 throw new ArgumentNullException(nameof(pluginSourceLocation));
             }
-            var folders = Directory.EnumerateDirectories(Server.MapPath(pluginSourceLocation));
+            var folders = Directory.EnumerateDirectories(WebEnvironment.MapPath(pluginSourceLocation));
 
             _pluginCollection = new PluginCollection();
 

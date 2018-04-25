@@ -12,7 +12,6 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Lazy.EFBase\Lazy.EFBase.csproj" />
     <ProjectReference Include="..\..\Lazy.EFCore\Lazy.EFCore.csproj" />
     <ProjectReference Include="..\..\Lazy.Utilities\Lazy.Utilities.csproj" />
   </ItemGroup>

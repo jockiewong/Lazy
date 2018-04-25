@@ -13,12 +13,12 @@ namespace Lazy.AspNetCore.Pluggable
     /// <summary>
     /// 静态 服务端路径相关
     /// </summary>
-    public static class Server
+    public static class WebEnvironment
     {
         //TODO: 优化
         static IHostingEnvironment _hostingEnvironment;
 
-        internal static void Init(IHostingEnvironment hostingEnvironment)
+        internal static void UseWebEnvironment(IHostingEnvironment hostingEnvironment)
         {
             if (_hostingEnvironment != null)
                 return;

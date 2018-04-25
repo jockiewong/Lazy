@@ -27,7 +27,7 @@ namespace Lazy.AspNetCore.Pluggable
         public static IServiceCollection AddLazyAspNetCoreMvcPluggable(
            this IServiceCollection serviceCollection,
            string pluginSourceLocation,
-           Action<PluggableOptions> optionsAction = null) 
+           Action<PluggableOptions> optionsAction = null)
         {
             if (serviceCollection == null)
                 throw new ArgumentNullException(nameof(serviceCollection));
@@ -43,9 +43,10 @@ namespace Lazy.AspNetCore.Pluggable
 
             var mvcBuilder = serviceCollection.AddMvc();
 
-            using (var scope = serviceCollection.BuildServiceProvider().CreateScope()) {
+            using (var scope = serviceCollection.BuildServiceProvider().CreateScope())
+            {
                 var host = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
-                Server.Init(host);
+                WebEnvironment.UseWebEnvironment(host);
 
                 PluggableOptions options =
                     scope
@@ -55,7 +56,7 @@ namespace Lazy.AspNetCore.Pluggable
 
                 var pluginManager = scope.ServiceProvider.GetRequiredService<IPluginManager>();
 
-                pluginManager.LoadAllPlugin(Server.MapPath(options.PluginSourceLocation));
+                pluginManager.LoadAllPlugin(WebEnvironment.MapPath(options.PluginSourceLocation));
 
                 if (options.PluginSourceLocation.IsNullOrWhiteSpace())
                     throw new KernelException("mvc pluggable option: PluginSourceLocation is null.");
@@ -65,13 +66,15 @@ namespace Lazy.AspNetCore.Pluggable
 
                 pluginManager.Plugins.ForEach(r => mvcBuilder.AddApplicationPart(r.PluginAssembly));
 
-                serviceCollection.Configure<StartupOptions>(r => {
+                serviceCollection.Configure<StartupOptions>(r =>
+                {
                     r.Plugins.AddRange(pluginManager.Plugins);
                 });
 
                 var viewConfigure = scope
                    .ServiceProvider.GetRequiredService<IPluginViewConfigure>();
-                mvcBuilder.AddRazorOptions(r => {
+                mvcBuilder.AddRazorOptions(r =>
+                {
                     viewConfigure.Configure(r);
                 });
 
@@ -92,7 +95,8 @@ namespace Lazy.AspNetCore.Pluggable
             Action<IRouteBuilder> configureRoutes = null
             )
         {
-            app.UseMvc(routeBuilder => {
+            app.UseMvc(routeBuilder =>
+            {
                 configureRoutes?.Invoke(routeBuilder);
 
                 routeBuilder.MapRoute(
