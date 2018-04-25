@@ -127,15 +127,7 @@ namespace Lazy.Utilities.Extensions
                 return list.GroupBy(r => r, keyComparer).Any(g => g.Count() > 1);
         }
 
-        /// <summary>
-        /// 判断集合中是否存在属性相等的元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="selectProperty"></param>
-        /// <param name="keyComparer"></param>
-        /// <returns></returns>
-        public static bool HasRepeat<T>(this IEnumerable<T> list, Func<T, object> selectProperty, IEqualityComparer<object> keyComparer = null)
+        public static bool HasRepeat<T, P>(this IEnumerable<T> list, Func<T, P> selectProperty)
         {
             if (list == null)
             {

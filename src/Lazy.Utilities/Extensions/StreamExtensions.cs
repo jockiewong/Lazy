@@ -18,16 +18,16 @@ namespace Lazy.Utilities.Extensions
         {
             try
             {
-                System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-                byte[] retVal = md5.ComputeHash(stream);
-                stream.Close();
-
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < retVal.Length; i++)
+                using (System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider())
                 {
-                    sb.Append(retVal[i].ToString("x2"));
+                    byte[] retVal = md5.ComputeHash(stream);
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < retVal.Length; i++)
+                    {
+                        sb.Append(retVal[i].ToString("x2"));
+                    }
+                    return sb.ToString();
                 }
-                return sb.ToString();
             }
             catch (Exception ex)
             {

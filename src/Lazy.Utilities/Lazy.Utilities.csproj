@@ -1,17 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../common.props" />
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Excel\**" />
-    <Compile Remove="Web\**" />
-    <EmbeddedResource Remove="Excel\**" />
-    <EmbeddedResource Remove="Web\**" />
-    <None Remove="Excel\**" />
-    <None Remove="Web\**" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />

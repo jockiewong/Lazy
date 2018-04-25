@@ -1,5 +1,4 @@
-﻿using Lazy.EFBase;
-using Lazy.Utilities.Extensions;
+﻿using Lazy.Utilities.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -49,9 +48,8 @@ namespace Lazy.EFCore
                                   DefaultValue = filed.DefaultValue,
                                   Nullable = p.IsNullable,
                                   MaxLength = p.GetMaxLength(),
-                                  IsPrimaryKey = p.IsPrimaryKey()
-                                  //ef6中获取不到外键数据
-                                  //IsForeignKey = p.IsForeignKey()
+                                  IsPrimaryKey = p.IsPrimaryKey(),
+                                  IsForeignKey = p.IsForeignKey()
                               };
                           })
                           .ToList()

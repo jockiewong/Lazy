@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
 using Lazy.Utilities.Extensions;
-using Lazy.EFBase;
+using Lazy.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lazy.EFCore.Tests

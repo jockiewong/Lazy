@@ -16,7 +16,6 @@ namespace Lazy.Utilities.Extensions
             return dt.AddDays((int)whichFirst - (int)dt.DayOfWeek);
         }
 
-
         /// <summary>
         /// 获取本周的最后一天
         /// </summary>
@@ -250,5 +249,4 @@ namespace Lazy.Utilities.Extensions
             return d1.Date == d2.Date;
         }
     }
-
 }
