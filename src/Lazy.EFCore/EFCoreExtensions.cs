@@ -98,6 +98,7 @@ namespace Lazy.EFCore
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
 
+            //反射得到ModelBuilder的ApplyConfiguration<TEntity>(...)方法
             var applyConfigurationMethod = modelBuilder.GetType().GetMethod("ApplyConfiguration");
 
             //所有fluent api配置类
@@ -124,13 +125,13 @@ namespace Lazy.EFCore
                 registedTypes.Add(entityType);
             });
 
-            //反射调用Entity方法 注册实体
             assembly
                 .DefinedTypes
                 .Where(r => !registedTypes.Contains(r))
                 .Where(entityTypePredicate)
                 .ForEach_(r =>
                 {
+                    //直接调用Entity方法注册实体
                     modelBuilder.Entity(r);
                 });
         }

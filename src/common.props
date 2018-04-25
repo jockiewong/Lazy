@@ -2,18 +2,18 @@
   <PropertyGroup>
     <Version>1.0.0</Version>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <!--<PackageIconUrl>http://www.aspnetboilerplate.com/images/abp_nupkg.png</PackageIconUrl>
-    <PackageProjectUrl>http://www.aspnetboilerplate.com/</PackageProjectUrl>-->
+    <!--<PackageIconUrl>http://www.aspnetboilerplate.com/images/abp_nupkg.png</PackageIconUrl>-->
+    <PackageProjectUrl>https://github.com/280780363/Lazy</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/280780363/Lazy/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/280780363/Lazy</RepositoryUrl>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' ">
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
-  
-  <ItemGroup>
+
+  <!-- <ItemGroup>
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" />
   </ItemGroup>-->
 

@@ -115,7 +115,7 @@ namespace Lazy.EF6
         }
 
         /// <summary>
-        /// 注册某个程序集中所有<typeparamref name="TEntityBase"/>的非抽象子类为实体
+        /// 注册某个程序集中所有<typeparamref name="TEntityBase"/>的非抽象实体子类
         /// </summary>
         /// <typeparam name="TEntityBase">实体基类</typeparam>
         /// <param name="modelBuilder"></param>
@@ -127,7 +127,7 @@ namespace Lazy.EF6
         }
 
         /// <summary>
-        /// 注册某个程序集中所有<typeparamref name="TEntityBase"/>的非抽象子类为实体
+        /// 注册某个程序集中所有<typeparamref name="TEntityBase"/>的非抽象实体子类
         /// </summary>
         /// <typeparam name="TEntityBase">实体基类</typeparam>
         /// <param name="modelBuilder"></param>
@@ -138,21 +138,22 @@ namespace Lazy.EF6
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
 
+            //反射得到DbModelBuilder的Entity方法
             var entityMethod = modelBuilder.GetType().GetMethod("Entity");
 
+            //反射得到ConfigurationRegistrar的Add<TEntityType>方法
             var addMethod = typeof(ConfigurationRegistrar)
                    .GetMethods()
                    .Single(m =>
                      m.Name == "Add"
                      && m.GetGenericArguments().Any(a => a.Name == "TEntityType"));
-            //所有fluent api配置类
+            //扫描所有fluent api配置类,要求父类型必须是EntityTypeConfiguration<TEntityType>
             var configTypes = assembly
                                .GetTypesSafely()
                                .Where(t =>
                                      !t.IsAbstract && t.BaseType != null && t.IsClass
                                      && t.BaseType.IsGenericType
                                      && t.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)
-                                     //&& t.IsChildTypeOfGenericType(typeof(EntityTypeConfiguration<>))
                                      )
                                .ToList();
 
@@ -165,6 +166,7 @@ namespace Lazy.EF6
                 if (!entityTypePredicate(entityType))
                     return;
                 var map = Activator.CreateInstance(mappingType);
+                //反射调用ConfigurationRegistrar的Add方法注册fluent api配置,该方法会同时注册实体
                 addMethod.MakeGenericMethod(entityType)
                      .Invoke(modelBuilder.Configurations, new object[] { map });
 
