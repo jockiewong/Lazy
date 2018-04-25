@@ -127,7 +127,7 @@ namespace Lazy.Utilities.Extensions
                 return list.GroupBy(r => r, keyComparer).Any(g => g.Count() > 1);
         }
 
-        public static bool HasRepeat<T, P>(this IEnumerable<T> list, Func<T, P> selectProperty)
+        public static bool HasRepeat<T, P>(this IEnumerable<T> list, Func<T, P> selectProperty, IEqualityComparer<P> keyComparer = null)
         {
             if (list == null)
             {
@@ -144,7 +144,6 @@ namespace Lazy.Utilities.Extensions
             else
                 return list.GroupBy(selectProperty, keyComparer).Any(g => g.Count() > 1);
         }
-
 
         public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> list, bool condition, Func<T, bool> where)
         {

@@ -10,7 +10,6 @@ namespace Lazy.Utilities.Extensions
         /// <param name="dt"></param>
         /// <param name="whichFirst">哪一天的一周的开始</param>
         /// <returns></returns>
-
         public static DateTime GetWeekFirstDay(this DateTime dt, DayOfWeek whichFirst = DayOfWeek.Monday)
         {
             return dt.AddDays((int)whichFirst - (int)dt.DayOfWeek);
@@ -54,7 +53,6 @@ namespace Lazy.Utilities.Extensions
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-
         public static DateTime GetMonthFirstDay(this DateTime dt)
         {
             return dt.AddDays(1 - dt.Day);
