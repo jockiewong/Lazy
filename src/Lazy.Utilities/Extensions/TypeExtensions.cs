@@ -17,12 +17,10 @@ namespace Lazy.Utilities.Extensions
         /// <param name="childType">子类型</param>
         /// <param name="genericType">泛型父级,例:typeof(IParent&lt;&gt;)</param>
         /// <returns></returns>
-        public static bool IsChildTypeOfGenericType(this Type childType, Type genericType)
-        {
+        public static bool IsChildTypeOfGenericType(this Type childType, Type genericType) {
             var interfaceTypes = childType.GetTypeInfo().ImplementedInterfaces;
 
-            foreach (var it in interfaceTypes)
-            {
+            foreach (var it in interfaceTypes) {
                 if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
                     return true;
             }
@@ -42,8 +40,7 @@ namespace Lazy.Utilities.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static T ConvertTo<T>(this object value)
-        {
+        public static T ConvertTo<T>(this object value) {
             if (value == null)
                 return default(T);
 
@@ -67,15 +64,29 @@ namespace Lazy.Utilities.Extensions
                 return (T)Convert.ChangeType(value, destinationType);
             return (T)value;
         }
-        
+
+        /// <summary>
+        /// 如果没有值,或者转换不成功返回null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T? TryConvertTo<T>(this object value) where T : struct {
+            try {
+                return ConvertTo<T?>(value);
+            }
+            catch {
+                return null;
+            }
+        }
+
         /// <summary>
         /// 类型转换
         /// </summary>
         /// <param name="value"></param>
         /// <param name="destinationType">目标类型</param>
         /// <returns></returns>
-        public static object ConvertTo(this object value, Type destinationType)
-        {
+        public static object ConvertTo(this object value, Type destinationType) {
             if (value == null)
                 return null;
 
@@ -102,13 +113,11 @@ namespace Lazy.Utilities.Extensions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static IDictionary<string, object> MapToDictionary(this object obj)
-        {
+        public static IDictionary<string, object> MapToDictionary(this object obj) {
             var dic = new Dictionary<string, object>();
             var type = obj.GetType();
             List<PropertyInfo> props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
-            props.ForEach_(r =>
-            {
+            props.ForEach_(r => {
                 if (r != null)
                     dic[r.Name] = r.GetValue(obj);
             });
@@ -122,8 +131,7 @@ namespace Lazy.Utilities.Extensions
         /// <param name="type"></param>
         /// <param name="parentType"></param>
         /// <returns></returns>
-        public static bool IsChildTypeOf(this Type type, Type parentType)
-        {
+        public static bool IsChildTypeOf(this Type type, Type parentType) {
             return parentType.IsAssignableFrom(type);
         }
 
@@ -133,8 +141,7 @@ namespace Lazy.Utilities.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsChildTypeOf<T>(this Type type)
-        {
+        public static bool IsChildTypeOf<T>(this Type type) {
             return type.IsChildTypeOf(typeof(T));
         }
     }

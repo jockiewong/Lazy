@@ -23,10 +23,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// MD5加密
         /// </summary>
-        public static string Md532(this string value)
-        {
-            if (value == null)
-            {
+        public static string Md532(this string value) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
 
@@ -38,8 +36,7 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// 加权MD5加密
         /// </summary>
-        public static string Md532(this string value, string salt)
-        {
+        public static string Md532(this string value, string salt) {
             return salt == null ? value.Md532() : (value + "『" + salt + "』").Md532();
         }
 
@@ -50,10 +47,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// SHA1 加密
         /// </summary>
-        public static string Sha1(this string value)
-        {
-            if (value == null)
-            {
+        public static string Sha1(this string value) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
 
@@ -65,10 +60,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// SHA256 加密
         /// </summary>
-        public static string Sha256(this string value)
-        {
-            if (value == null)
-            {
+        public static string Sha256(this string value) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
 
@@ -80,10 +73,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// SHA512 加密
         /// </summary>
-        public static string Sha512(this string value)
-        {
-            if (value == null)
-            {
+        public static string Sha512(this string value) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -98,10 +89,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HmacSha1 加密
         /// </summary>
-        public static string HmacSha1(this string value, string keyVal)
-        {
-            if (value == null)
-            {
+        public static string HmacSha1(this string value, string keyVal) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -113,10 +102,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HmacSha256 加密
         /// </summary>
-        public static string HmacSha256(this string value, string keyVal)
-        {
-            if (value == null)
-            {
+        public static string HmacSha256(this string value, string keyVal) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -128,10 +115,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HmacSha384 加密
         /// </summary>
-        public static string HmacSha384(this string value, string keyVal)
-        {
-            if (value == null)
-            {
+        public static string HmacSha384(this string value, string keyVal) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -143,10 +128,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HmacSha512 加密
         /// </summary>
-        public static string HmacSha512(this string value, string keyVal)
-        {
-            if (value == null)
-            {
+        public static string HmacSha512(this string value, string keyVal) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -158,10 +141,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HmacMd5 加密
         /// </summary>
-        public static string HmacMd5(this string value, string keyVal)
-        {
-            if (value == null)
-            {
+        public static string HmacMd5(this string value, string keyVal) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
             var encoding = Encoding.UTF8;
@@ -197,10 +178,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <param name="keyVal">密钥值</param>  
         /// <param name="ivVal">加密辅助向量</param> 
         /// <returns></returns>  
-        public static string AesStr(this string value, string keyVal, string ivVal = iv)
-        {
-            if (value == null)
-            {
+        public static string AesStr(this string value, string keyVal, string ivVal = iv) {
+            if (value == null) {
                 throw new ArgumentNullException("未将对象引用设置到对象的实例。");
             }
 
@@ -212,10 +191,8 @@ namespace Lazy.Utilities.EncryptDecrypt
             byte[] byteArray = encoding.GetBytes(value);
             string encrypt;
             Rijndael aes = Rijndael.Create();
-            using (MemoryStream mStream = new MemoryStream())
-            {
-                using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bVector), CryptoStreamMode.Write))
-                {
+            using (MemoryStream mStream = new MemoryStream()) {
+                using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bVector), CryptoStreamMode.Write)) {
                     cStream.Write(byteArray, 0, byteArray.Length);
                     cStream.FlushFinalBlock();
                     encrypt = Convert.ToBase64String(mStream.ToArray());
@@ -232,8 +209,7 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <param name="keyVal">密钥值</param>  
         /// <param name="ivVal">加密辅助向量</param>  
         /// <returns></returns>  
-        public static string UnAesStr(this string value, string keyVal, string ivVal = iv)
-        {
+        public static string UnAesStr(this string value, string keyVal, string ivVal = iv) {
             var encoding = Encoding.UTF8;
             byte[] bKey = new byte[32];
             Array.Copy(Encoding.UTF8.GetBytes(keyVal.PadRight(bKey.Length)), bKey, bKey.Length);
@@ -242,10 +218,8 @@ namespace Lazy.Utilities.EncryptDecrypt
             byte[] byteArray = Convert.FromBase64String(value);
             string decrypt;
             Rijndael aes = Rijndael.Create();
-            using (MemoryStream mStream = new MemoryStream())
-            {
-                using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateDecryptor(bKey, bVector), CryptoStreamMode.Write))
-                {
+            using (MemoryStream mStream = new MemoryStream()) {
+                using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateDecryptor(bKey, bVector), CryptoStreamMode.Write)) {
                     cStream.Write(byteArray, 0, byteArray.Length);
                     cStream.FlushFinalBlock();
                     decrypt = encoding.GetString(mStream.ToArray());
@@ -262,28 +236,23 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <param name="keyVal">密钥值</param>  
         /// <param name="ivVal">加密辅助向量</param>  
         /// <returns></returns>  
-        public static byte[] AesByte(this byte[] data, string keyVal, string ivVal = iv)
-        {
+        public static byte[] AesByte(this byte[] data, string keyVal, string ivVal = iv) {
             byte[] bKey = new byte[32];
             Array.Copy(Encoding.UTF8.GetBytes(keyVal.PadRight(bKey.Length)), bKey, bKey.Length);
             byte[] bVector = new byte[16];
             Array.Copy(Encoding.UTF8.GetBytes(ivVal.PadRight(bVector.Length)), bVector, bVector.Length);
             byte[] cryptograph;
             Rijndael aes = Rijndael.Create();
-            try
-            {
-                using (MemoryStream mStream = new MemoryStream())
-                {
-                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bVector), CryptoStreamMode.Write))
-                    {
+            try {
+                using (MemoryStream mStream = new MemoryStream()) {
+                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bVector), CryptoStreamMode.Write)) {
                         cStream.Write(data, 0, data.Length);
                         cStream.FlushFinalBlock();
                         cryptograph = mStream.ToArray();
                     }
                 }
             }
-            catch
-            {
+            catch {
                 cryptograph = null;
             }
             return cryptograph;
@@ -296,26 +265,20 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <param name="keyVal">密钥值</param>  
         /// <param name="ivVal">加密辅助向量</param> 
         /// <returns></returns>  
-        public static byte[] UnAesByte(this byte[] data, string keyVal, string ivVal = iv)
-        {
+        public static byte[] UnAesByte(this byte[] data, string keyVal, string ivVal = iv) {
             byte[] bKey = new byte[32];
             Array.Copy(Encoding.UTF8.GetBytes(keyVal.PadRight(bKey.Length)), bKey, bKey.Length);
             byte[] bVector = new byte[16];
             Array.Copy(Encoding.UTF8.GetBytes(ivVal.PadRight(bVector.Length)), bVector, bVector.Length);
             byte[] original;
             Rijndael aes = Rijndael.Create();
-            try
-            {
-                using (MemoryStream mStream = new MemoryStream(data))
-                {
-                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateDecryptor(bKey, bVector), CryptoStreamMode.Read))
-                    {
-                        using (MemoryStream originalMemory = new MemoryStream())
-                        {
+            try {
+                using (MemoryStream mStream = new MemoryStream(data)) {
+                    using (CryptoStream cStream = new CryptoStream(mStream, aes.CreateDecryptor(bKey, bVector), CryptoStreamMode.Read)) {
+                        using (MemoryStream originalMemory = new MemoryStream()) {
                             byte[] buffer = new byte[1024];
                             int readBytes;
-                            while ((readBytes = cStream.Read(buffer, 0, buffer.Length)) > 0)
-                            {
+                            while ((readBytes = cStream.Read(buffer, 0, buffer.Length)) > 0) {
                                 originalMemory.Write(buffer, 0, readBytes);
                             }
 
@@ -324,8 +287,7 @@ namespace Lazy.Utilities.EncryptDecrypt
                     }
                 }
             }
-            catch
-            {
+            catch {
                 original = null;
             }
             return original;
@@ -338,10 +300,8 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// DES 加密
         /// </summary>
-        public static string Des(this string value, string keyVal, string ivVal = iv)
-        {
-            try
-            {
+        public static string Des(this string value, string keyVal, string ivVal = iv) {
+            try {
                 byte[] data = Encoding.UTF8.GetBytes(value);
                 var des = new DESCryptoServiceProvider { Key = Encoding.ASCII.GetBytes(keyVal.Length > 8 ? keyVal.Substring(0, 8) : keyVal), IV = Encoding.ASCII.GetBytes(ivVal.Length > 8 ? ivVal.Substring(0, 8) : ivVal) };
                 var desencrypt = des.CreateEncryptor();
@@ -354,14 +314,11 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// DES 解密
         /// </summary>
-        public static string UnDes(this string value, string keyVal, string ivVal = iv)
-        {
-            try
-            {
+        public static string UnDes(this string value, string keyVal, string ivVal = iv) {
+            try {
                 string[] sInput = value.Split("-".ToCharArray());
                 byte[] data = new byte[sInput.Length];
-                for (int i = 0; i < sInput.Length; i++)
-                {
+                for (int i = 0; i < sInput.Length; i++) {
                     data[i] = byte.Parse(sInput[i], NumberStyles.HexNumber);
                 }
                 var des = new DESCryptoServiceProvider { Key = Encoding.ASCII.GetBytes(keyVal.Length > 8 ? keyVal.Substring(0, 8) : keyVal), IV = Encoding.ASCII.GetBytes(ivVal.Length > 8 ? ivVal.Substring(0, 8) : ivVal) };
@@ -381,10 +338,9 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// </summary>
         /// <param name="value">待加密字段</param>
         /// <returns></returns>
-        public static string Base64(this string value)
-        {
+        public static string Base64(this string value) {
             var btArray = Encoding.UTF8.GetBytes(value);
-            return Convert.ToBase64String(btArray, 0, btArray.Length);
+            return Convert.ToBase64String(btArray);
         }
 
         /// <summary>
@@ -392,34 +348,11 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// </summary>
         /// <param name="value">待解密字段</param>
         /// <returns></returns>
-        public static string UnBase64(this string value)
-        {
+        public static string UnBase64(this string value) {
             var btArray = Convert.FromBase64String(value);
             return Encoding.UTF8.GetString(btArray);
         }
 
-        #endregion
-
-        #region Base64加密解密
-        /// <summary>
-        /// Base64加密 可逆
-        /// </summary>
-        /// <param name="value">待加密文本</param>
-        /// <returns></returns>
-        public static string Base64Encrypt(string value)
-        {
-            return Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(value));
-        }
-
-        /// <summary>
-        /// Base64解密
-        /// </summary>
-        /// <param name="ciphervalue">密文</param>
-        /// <returns></returns>
-        public static string Base64Decrypt(string ciphervalue)
-        {
-            return System.Text.Encoding.Default.GetString(System.Convert.FromBase64String(ciphervalue));
-        }
         #endregion
 
         #region 内部方法
@@ -427,8 +360,7 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// 转换成字符串
         /// </summary>
-        private static string Bytes2Str(this IEnumerable<byte> source, string formatStr = "{0:X2}")
-        {
+        private static string Bytes2Str(this IEnumerable<byte> source, string formatStr = "{0:X2}") {
             StringBuilder pwd = new StringBuilder();
             foreach (byte btStr in source) { pwd.AppendFormat(formatStr, btStr); }
             return pwd.ToString();
@@ -437,8 +369,7 @@ namespace Lazy.Utilities.EncryptDecrypt
         /// <summary>
         /// HashAlgorithm 加密统一方法
         /// </summary>
-        private static string HashAlgorithmBase(HashAlgorithm hashAlgorithmObj, string source, Encoding encoding)
-        {
+        private static string HashAlgorithmBase(HashAlgorithm hashAlgorithmObj, string source, Encoding encoding) {
             byte[] btStr = encoding.GetBytes(source);
             byte[] hashStr = hashAlgorithmObj.ComputeHash(btStr);
             return hashStr.Bytes2Str();
